@@ -15,6 +15,6 @@
 .\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_SoftDevice_S110\8.0.0\headers\ble_gattc.h
 .\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_SoftDevice_S110\8.0.0\headers\ble_gatts.h
 .\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\util\app_util.h
-.\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\7.1.0\Device\Include\compiler_abstraction.h
+.\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\7.2.1\Device\Include\compiler_abstraction.h
 .\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\util\nordic_common.h
 .\_build\ble_advdata.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_BLE\2.0.0\common\ble_srv_common.h
