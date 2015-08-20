@@ -40,14 +40,14 @@
 #include "bsp.h"
 #include "pstorage.h"
 //#include "app_scheduler.h"
-
+#include "ble_bas.h"
 //#include "nrf_delay.h"
 
 #define IS_SRVC_CHANGED_CHARACT_PRESENT 0                                           /**< Include the service_changed characteristic. If not enabled, the server's database cannot be changed for the lifetime of the device. */
 
 #define WAKEUP_BUTTON_ID                0                                           /**< Button used to wake up the application. */
 
-#define APP_ADV_INTERVAL                1600*5  //0x4000                                        /**< 10.24 secs  The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
+#define APP_ADV_INTERVAL                1600*1  //1600*5  //0x4000                                        /**< 10.24 secs  The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
 #define APP_ADV_TIMEOUT_IN_SECONDS      0    //180                                         /**< The advertising timeout (in units of seconds). */
 
 #define APP_TIMER_PRESCALER             0                                      /**< Value of the RTC1 PRESCALER register. */
@@ -83,12 +83,21 @@
 static ble_gap_sec_params_t             m_sec_params;                               /**< Security requirements for this application. */
 static ble_nus_t                        m_nus;                                      /**< Structure to identify the Nordic UART Service. */
 static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;    /**< Handle of the current connection. */
+//static ble_gatts_char_handles_t m_char_handles;                                     /**< Handles of local characteristic (as provided by the BLE stack).*/
+static uint16_t                  m_service_handle;                                   /**< Handle of local service (as provided by the BLE stack).*/
+static bool                      m_is_notifying_enabled = false;                     /**< Variable to indicate whether the notification is enabled by the peer.*/
+static app_timer_id_t            m_conn_int_timer_id;                                /**< Connection interval timer. */
+static app_timer_id_t            m_notif_timer_id;                                   /**< Notification timer. */
+static ble_bas_t                        m_bas;                                     /**< Structure used to identify the battery service. */
+
+
+
 #define UART_POWER  	 8  //3       //5TM Power
 //#define DEVICE_NAME                     "CSTDataLog"                               /**< Name of device. Will be included in the advertising data. */
 uint8_t device_name[15]  = "5T:" ;
 uint32_t baudrate_select = 1200;
-//#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput5  //pin04
-#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin04
+//#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput5  //pin04   BEACON
+#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin03  
 	
 #define LED_POWER  				      20
 #define COUNTER_STEP            18  
@@ -102,12 +111,12 @@ static uint16_t data_index = 8;  //[0:3]time_counter
 static uint8_t pstorage_wait_flag = 0;
 static pstorage_block_t pstorage_wait_handle = 0;
 static pstorage_handle_t       flash_base_handle;
-static uint32_t 	pstorage_block_id, pstorage_block_adv;
+static uint32_t 	pstorage_block_id, pstorage_next_adv;
 static uint16_t adv_sleep_secs = 0;
 static uint16_t connect_time_out = 0 ;
 static pstorage_handle_t 		flash_handle ;
 static app_timer_id_t  					weakup_meantimer_id	;
-
+static uint16_t    		 notify_id = (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN - 1);
 #define ADC_REF_VOLTAGE_IN_MILLIVOLTS        1200                                      /**< Reference voltage (in milli volts) used by ADC while doing conversion. */
 #define ADC_PRE_SCALING_COMPENSATION         3                                         /**< The ADC is configured to use VDD with 1/3 prescaling as input. And hence the result of conversion is to be multiplied by 3 to get the actual value of the battery voltage.*/
 #define DIODE_FWD_VOLT_DROP_MILLIVOLTS       270                                       /**< Typical forward voltage drop of the diode (Part no: SD103ATW-7-F) that is connected in series with the voltage supply. This is the voltage drop when the forward current is 1mA. Source: Data sheet of 'SURFACE MOUNT SCHOTTKY BARRIER DIODE ARRAY' available at www.diodes.com. */
@@ -153,23 +162,74 @@ void assert_nrf_callback(uint16_t line_num, const uint8_t * p_file_name)
 
 void app_error_handler(uint32_t error_code, uint32_t line_num, const uint8_t * p_file_name)
 {
-//    APPL_LOG("[APPL]: ASSERT: %s, %d, error 0x%08x\r\n", p_file_name, line_num, error_code);
-//						simple_uart_put( error_code);
-//						simple_uart_put( 0xEE);
-
-//    nrf_gpio_pin_set(ASSERT_LED_PIN_NO);
-
-    // This call can be used for debug purposes during development of an application.
-    // @note CAUTION: Activating this code will write the stack to flash on an error.
-    //                This function should NOT be used in a final product.
-    //                It is intended STRICTLY for development/debugging purposes.
-    //                The flash write will happen EVEN if the radio is active, thus interrupting
-    //                any communication.
-    //                Use with care. Un-comment the line below to use.
-    // ble_debug_assert_handler(error_code, line_num, p_file_name);
-
-    // On assert, the system can only recover with a reset.
     NVIC_SystemReset();
+}
+static void char_notify(void)
+{
+    uint32_t err_code;
+    static uint16_t len = 16;
+		err_code = NRF_SUCCESS;
+		static uint8_t notify_data[16];
+    // Send value if connected and notifying.
+    if ((m_conn_handle != BLE_CONN_HANDLE_INVALID) && m_is_notifying_enabled)
+    {
+//				ble_gatts_value_t gatts_value;
+//				memset(&gatts_value, 0, sizeof(gatts_value));
+//				gatts_value.len     = sizeof(uint32_t);
+//				gatts_value.offset  = 0;
+//				gatts_value.p_value = (uint8_t *)&notify_id;
+				ble_gatts_hvx_params_t 		hvx_params;
+        memset(&hvx_params, 0, sizeof(hvx_params));
+        hvx_params.handle   = m_bas.notify_handles.value_handle;  //   m_char_handles.value_handle;
+        hvx_params.type     = BLE_GATT_HVX_NOTIFICATION;
+        hvx_params.offset   = 0;
+        hvx_params.p_len    = &len;
+//        hvx_params.p_data   = (uint8_t *) flash_load;  //m_char_value;
+//				pstorage_handle_t flash_handle;
+
+				while(true){
+					err_code = pstorage_block_identifier_get(&flash_base_handle,(notify_id
+							% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)), &flash_handle);
+					APP_ERROR_CHECK(err_code);
+					err_code = pstorage_load(notify_data, &flash_handle, DATA_LOG_LEN, 0);
+					APP_ERROR_CHECK(err_code);
+					hvx_params.p_data   = ((uint8_t *) notify_data);  //m_char_value;
+					err_code = sd_ble_gatts_hvx(m_conn_handle, &hvx_params);
+					if ((err_code == BLE_ERROR_NO_TX_BUFFERS) ||
+							(err_code == NRF_ERROR_INVALID_STATE) ||
+							(err_code == BLE_ERROR_GATTS_SYS_ATTR_MISSING))	break;
+					else if ((err_code != NRF_SUCCESS))
+							{
+									APP_ERROR_HANDLER(err_code);
+							}
+//		 			sd_ble_gatts_value_set(m_bas.conn_handle, m_bas.Vtm_date_time_handles.value_handle, &gatts_value);
+				  if (notify_id-- == 0){
+								m_is_notifying_enabled =  false;
+						    break;
+					 }
+					}
+
+		}
+}
+static void on_write(ble_evt_t * p_ble_evt)
+{
+//		uint32_t err_code;
+    ble_gatts_evt_write_t * p_evt_write = &p_ble_evt->evt.gatts_evt.params.write;
+    if ((p_evt_write->handle == m_bas.Vtm_date_time_handles.value_handle) && (p_evt_write->len == 2))
+				notify_id = *(uint16_t *)p_evt_write->data;
+		else if ((p_evt_write->handle == m_bas.Nrf_name_handles.value_handle) && (p_evt_write->len == 4))
+			{
+				device_name[0] = *p_evt_write->data;
+				device_name[1] = *(p_evt_write->data+1);
+				device_name[2] = *(p_evt_write->data+2);
+				device_name[3] = *(p_evt_write->data+3);
+			}
+    else if ((p_evt_write->handle == m_bas.notify_handles.cccd_handle) && (p_evt_write->len == 2))
+    {
+        // CCCD written. Start notifications
+        m_is_notifying_enabled = ble_srv_is_notification_enabled(p_evt_write->data);
+        if (m_is_notifying_enabled) char_notify();
+    }
 }
 
  char char_hex( char bHex){
@@ -192,7 +252,6 @@ static void gap_params_init(void)
     uint32_t                err_code;
     ble_gap_conn_params_t   gap_conn_params;
     ble_gap_conn_sec_mode_t sec_mode;
-
     BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
     		ble_gap_addr_t  	p_addr;
     sd_ble_gap_address_get	(	&p_addr	);
@@ -265,7 +324,6 @@ static void advertising_start(uint16_t adv_interval, uint16_t adv_timeout)
 {
     uint32_t             err_code;
     ble_gap_adv_params_t adv_params;
-    
     // Start advertising.
     memset(&adv_params, 0, sizeof(adv_params));
     
@@ -274,9 +332,9 @@ static void advertising_start(uint16_t adv_interval, uint16_t adv_timeout)
     adv_params.fp          = BLE_GAP_ADV_FP_ANY;
     adv_params.interval    = adv_interval;
     adv_params.timeout     = adv_timeout;
-
     err_code = sd_ble_gap_adv_start(&adv_params);
     APP_ERROR_CHECK(err_code);
+    advertising_init();
 
 //    err_code = bsp_indication_set(BSP_INDICATE_ADVERTISING);
 //    APP_ERROR_CHECK(err_code);
@@ -331,27 +389,89 @@ static void get_data(void)
 				}
 		err_code = pstorage_store(&flash_handle, (uint8_t * )(log_data), DATA_LOG_LEN, 0 );
 		APP_ERROR_CHECK(err_code);
-		if (*(uint16_t *)(data_array+18) == 0xFFFF) {
-				pstorage_block_adv++;
-				for (uint8_t i=0; i<16; i++) data_array[i+4] = log_data[i];
-				*(uint16_t *)(data_array+18) = 0x0000;
-		}
+//		if (*(uint16_t *)(data_array+18) == 0xFFFF) {
+//				pstorage_next_adv++;
+//				for (uint8_t i=0; i<16; i++) data_array[i+4] = log_data[i];
+//				*(uint16_t *)(data_array+18) = 0x0000;
+//		}
+//		else *(uint16_t *)(data_array+18) = (uint16_t)(pstorage_block_id-pstorage_next_adv);
 }
 
 
 /**@brief Function for initializing services that will be used by the application.
  */
-static void services_init(void)
+static void service_add(void)
 {
-    uint32_t         err_code;
-    ble_nus_init_t   nus_init;
-    
-    memset(&nus_init, 0, sizeof(nus_init));
-
-//    nus_init.data_handler = nus_data_handler;
-    
-    err_code = ble_nus_init(&m_nus, &nus_init);
+    uint32_t       			err_code;
+    ble_gatts_char_md_t char_md;
+    ble_gatts_attr_md_t cccd_md;
+    ble_gatts_attr_t    attr_char_value;
+    ble_uuid_t          ble_uuid;
+    ble_gatts_attr_md_t attr_md;
+    // Add service
+    BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_DEVICE_INFORMATION_SERVICE);
+    err_code = sd_ble_gatts_service_add(BLE_GATTS_SRVC_TYPE_PRIMARY, &ble_uuid, &m_service_handle);
     APP_ERROR_CHECK(err_code);
+    // cccd_md init characteristic
+        memset(&cccd_md, 0, sizeof(cccd_md));
+        BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.read_perm);
+        BLE_GAP_CONN_SEC_MODE_SET_OPEN(&cccd_md.write_perm);
+        cccd_md.vloc       = BLE_GATTS_VLOC_STACK;
+				memset(&char_md, 0, sizeof(char_md));
+				char_md.p_char_user_desc  = NULL;
+				char_md.p_char_pf         = NULL;
+				char_md.p_user_desc_md    = NULL;
+				char_md.p_cccd_md         = (char_md.char_props.notify) ? &cccd_md : NULL;
+				char_md.p_sccd_md         = (char_md.char_props.broadcast) ? &cccd_md : NULL;
+
+				memset(&attr_md, 0, sizeof(attr_md));
+				BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.read_perm);
+				BLE_GAP_CONN_SEC_MODE_SET_OPEN(&attr_md.write_perm);
+				attr_md.vloc       = BLE_GATTS_VLOC_STACK;
+				attr_md.rd_auth    = 0;
+				attr_md.wr_auth    = 0;
+				attr_md.vlen       = 0;
+// char notify
+				memset(&attr_char_value, 0, sizeof(attr_char_value));
+				char_md.char_props.read   = 0;
+		    char_md.char_props.write  = 0;
+				char_md.char_props.notify = 1;
+				attr_char_value.p_attr_md = &attr_md;
+				attr_char_value.init_len  = 16;   //sizeof(uint16_t);
+				attr_char_value.init_offs = 0;
+				attr_char_value.max_len   = 16; //sizeof(uint32_t);
+				attr_char_value.p_value   = NULL; 
+				BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_ALERT_NOTIFICATION_CONTROL_POINT_CHAR);
+				attr_char_value.p_uuid    = &ble_uuid;
+				err_code = sd_ble_gatts_characteristic_add(m_bas.service_handle, &char_md,
+																									 &attr_char_value,
+																									 &m_bas.notify_handles);
+				
+// char data_time
+				memset(&attr_char_value, 0, sizeof(attr_char_value));
+				char_md.char_props.read   = 1;
+		    char_md.char_props.write  = 1;
+				char_md.char_props.notify = 0;
+				attr_char_value.p_attr_md = &attr_md;
+				attr_char_value.init_len  = 2;   //sizeof(uint16_t);
+				attr_char_value.init_offs = 0;
+				attr_char_value.max_len   = 2; //sizeof(uint32_t);
+				attr_char_value.p_value   = NULL; 
+				BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_ALERT_CATEGORY_ID_CHAR);
+				attr_char_value.p_uuid    = &ble_uuid;
+				err_code = sd_ble_gatts_characteristic_add(m_bas.service_handle, &char_md,
+																									 &attr_char_value,
+																									 &m_bas.Vtm_date_time_handles);
+// char name
+				attr_char_value.init_len  = sizeof(uint32_t);
+				char_md.p_cccd_md         = (char_md.char_props.notify) ? &cccd_md : NULL;
+				char_md.p_sccd_md         = (char_md.char_props.broadcast) ? &cccd_md : NULL;
+				attr_char_value.max_len   = sizeof(uint32_t);
+				BLE_UUID_BLE_ASSIGN(ble_uuid, BLE_UUID_MANUFACTURER_NAME_STRING_CHAR);
+				attr_char_value.p_uuid    = &ble_uuid;
+				err_code = sd_ble_gatts_characteristic_add(m_bas.service_handle, &char_md,
+																									 &attr_char_value,
+																									 &m_bas.Nrf_name_handles);
 }
 
 
@@ -423,8 +543,9 @@ static void conn_params_init(void)
     APP_ERROR_CHECK(err_code);
 }
 
-static void weakup_meantimeout_handler(void)
+static void weakup_meantimeout_handler(void * p_context)
 {
+    UNUSED_PARAMETER(p_context);
     uint32_t err_code;
 		sd_ble_gap_scan_stop();
 		adv_sleep_secs = 10;
@@ -446,44 +567,67 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 				case BLE_GAP_EVT_SCAN_REQ_REPORT:
 						if (p_ble_evt->evt.gap_evt.params.scan_req_report.peer_addr.addr[0] == 0x58 && 
 									p_ble_evt->evt.gap_evt.params.scan_req_report.peer_addr.addr[1] == 0x81){
-								 if (pstorage_block_adv <= pstorage_block_id){
-												err_code = pstorage_block_identifier_get(&flash_base_handle,(pstorage_block_adv
+								 if (pstorage_next_adv <= pstorage_block_id){
+												err_code = pstorage_block_identifier_get(&flash_base_handle,(pstorage_next_adv
 														% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)), &flash_handle);
 												APP_ERROR_CHECK(err_code);
 												pstorage_load(data_array+4, &flash_handle, DATA_LOG_LEN, 0);
-//												*(uint32_t *)data_array = timer_counter;
-//												*(uint16_t *)(data_array+10) = (uint16_t)((timer_counter - timer_counter_adv)/data_periodic);
-												*(uint16_t *)(data_array+18) = (uint16_t)(pstorage_block_id-pstorage_block_adv);
+												*(uint16_t *)(data_array+18) = (uint16_t)(pstorage_block_id-pstorage_next_adv);
 												advertising_init();
 												app_timer_stop(weakup_meantimer_id);
-												app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(1000, 0), NULL);
-											  if ((!adv_sleep_secs) && ((pstorage_block_id - pstorage_block_adv) > 16))
-															{
-															sd_ble_gap_adv_stop();
-	//														advertising_start(0x30, 0);
-															advertising_start(160, 0);
-															adv_sleep_secs = 5;   
-//															break;  //for not to be lost records;
-															}
-												pstorage_block_adv ++;
-												}
-									else 	{
-											*(uint16_t *)(data_array+18) = 0xffff; //(uint16_t)(pstorage_block_id-pstorage_block_adv);
-											weakup_meantimeout_handler();
+												app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(2000, 0), NULL);
+//											  if ((!adv_sleep_secs) && ((pstorage_block_id - pstorage_next_adv) > 16))
+//															{
+//															sd_ble_gap_adv_stop();
+//	//														advertising_start(0x30, 0);
+//															advertising_start(160, 1);
+//															adv_sleep_secs = 5;   
+////															break;  //for not to be lost records;
+//															}
+												pstorage_next_adv ++;
+									}	else 	{
+//											*(uint16_t *)(data_array+18) = 0xffff; //(uint16_t)(pstorage_block_id-pstorage_next_adv);
+											weakup_meantimeout_handler(NULL);
 											}
 								}
 						break;
         case BLE_GAP_EVT_CONNECTED:
-//            err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
-//            APP_ERROR_CHECK(err_code);
             m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-            connect_time_out = 5;
+            connect_time_out = 10;
+//						nrf_gpio_pin_set (LED_PIN);												//Led on.
+//						application_timers_start();
+						ble_gap_conn_params_t   gap_conn_params;
+						gap_conn_params.min_conn_interval = ((4 * 10) / 5);  //= 10
+						gap_conn_params.max_conn_interval = (4 * 24) / 5;
+						gap_conn_params.slave_latency     = 4;		//SLAVE_LATENCY;
+						gap_conn_params.conn_sup_timeout  = MSEC_TO_UNITS(400, UNIT_10_MS) ;	//CONN_SUP_TIMEOUT;
+						err_code=sd_ble_gap_conn_param_update(m_conn_handle,&gap_conn_params);
+            APP_ERROR_CHECK(err_code);
+						ble_gatts_value_t gatts_value;
+						memset(&gatts_value, 0, sizeof(gatts_value));
+						gatts_value.len     = sizeof(uint32_t);
+						gatts_value.offset  = 0;
+// Updata server data for display  
+						gatts_value.p_value = (uint8_t *)&notify_id;
+						err_code = sd_ble_gatts_value_set(m_bas.conn_handle, m_bas.Vtm_date_time_handles.value_handle, &gatts_value);
+						gatts_value.p_value = (uint8_t *)device_name;
+						err_code = sd_ble_gatts_value_set(m_bas.conn_handle,m_bas.Nrf_name_handles.value_handle, &gatts_value);
             break;
-            
+						
+        case BLE_EVT_TX_COMPLETE:
+            char_notify();
+						break;
+
+        case BLE_GATTS_EVT_WRITE:
+            on_write(p_ble_evt);
+            break;
+			
         case BLE_GAP_EVT_DISCONNECTED:
 //            err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 //            APP_ERROR_CHECK(err_code);
             m_conn_handle = BLE_CONN_HANDLE_INVALID;
+						connect_time_out = 0;
+						
             advertising_start(APP_ADV_INTERVAL, 0);
             break;
             
@@ -561,7 +705,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
  */
 static void ble_evt_dispatch(ble_evt_t * p_ble_evt)
 {
-    ble_conn_params_on_ble_evt(p_ble_evt);
+//    ble_conn_params_on_ble_evt(p_ble_evt);
 //    ble_nus_on_ble_evt(&m_nus, p_ble_evt);
     on_ble_evt(p_ble_evt);
 }
@@ -634,30 +778,34 @@ static void weakup_timeout_handler(void * p_context)
     UNUSED_PARAMETER(p_context);
 		uint16_t err_code;
 		timer_counter ++;
-
 		if (!(timer_counter % data_periodic)) {
 				pstorage_block_id++;
-			  sd_ble_gap_adv_stop();
+				if (m_conn_handle != BLE_CONN_HANDLE_INVALID){
+							err_code = sd_ble_gap_disconnect(m_conn_handle,BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+							APP_ERROR_CHECK(err_code);
+							m_conn_handle = BLE_CONN_HANDLE_INVALID;
+							connect_time_out = 0;
+				} else sd_ble_gap_adv_stop();
 				get_data();
-				advertising_init();
-				if (!adv_sleep_secs) advertising_start(APP_ADV_INTERVAL , 0);
+//				advertising_init();
+				if (!adv_sleep_secs) advertising_start(APP_ADV_INTERVAL , 5000);
 				}
-		if (connect_time_out){
+		else if (connect_time_out){
 				connect_time_out--;
 				if (!connect_time_out){
-						err_code = sd_ble_gap_disconnect(m_conn_handle,
-                                             BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+						err_code = sd_ble_gap_disconnect(m_conn_handle,BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
             APP_ERROR_CHECK(err_code);
+					 m_conn_handle = BLE_CONN_HANDLE_INVALID;
 						}
 				}
-		if (adv_sleep_secs )	{
+		else if (adv_sleep_secs )	{
 				adv_sleep_secs --;
 				if (!adv_sleep_secs) {
 						sd_ble_gap_adv_stop();
 						advertising_start(APP_ADV_INTERVAL , 0);
 						}
 					}
-			else advertising_init();
+		else advertising_init();
 
     // Into next connection interval. Send one notification.
 //				char_notify();
@@ -686,12 +834,19 @@ int main(void)
                                 weakup_timeout_handler);
     APP_ERROR_CHECK(err_code);
     err_code = app_timer_create(&weakup_meantimer_id,
-                                APP_TIMER_MODE_REPEATED,
-                                weakup_timeout_handler);
+                                APP_TIMER_MODE_SINGLE_SHOT,
+                                weakup_meantimeout_handler);
     APP_ERROR_CHECK(err_code);
 
     APP_GPIOTE_INIT(APP_GPIOTE_MAX_USERS);
     ble_stack_init();
+//			NRF_GPIO->PIN_CNF[10] = (GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos)
+//																							| (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
+//																							| (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos)
+//																							| (GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
+//																							| (GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos);
+//		nrf_gpio_pin_clear(10);
+
 		NRF_GPIO->PIN_CNF[UART_POWER] = (GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos)
                                             | (GPIO_PIN_CNF_DRIVE_H0H1 << GPIO_PIN_CNF_DRIVE_Pos)
                                             | (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos)
@@ -712,21 +867,21 @@ int main(void)
     APP_ERROR_CHECK(err_code);
 //		timer_counter = 0x30000;
 //		pstorage_block_id = timer_counter/data_periodic;
-		pstorage_block_id = 0;
+		pstorage_block_id = 500;  //0;
 		err_code = pstorage_block_identifier_get(&flash_base_handle,((pstorage_block_id
 									% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)) & 0xffC0), &flash_handle);
     APP_ERROR_CHECK(err_code);
 		err_code = pstorage_clear(&flash_handle, PSTORAGE_PAGE_SIZE);
     APP_ERROR_CHECK(err_code);
     gap_params_init();
-    services_init();
+    service_add();
     conn_params_init();
     sec_params_init();
 //    printf("%s",start_string);
-		*(uint16_t *)(data_array+18)=0xffff;  //tell on_event not to be load again.
+//		*(uint16_t *)(data_array+18)=0xffff;  //tell on_event not to be load again.
 		get_data();
-    advertising_init();
-		pstorage_block_adv = 0;    //correct adv position to 0 for waitting 5881 ack
+//    advertising_init();
+		pstorage_next_adv = 1;    //correct adv position to 0 for waitting 5881 ack
 //    pstorage_load(data_array+4, &flash_base_handle, DATA_LOG_LEN, 0);
 //		*(uint32_t *)data_array = timer_counter;
     advertising_start(APP_ADV_INTERVAL, 0);
