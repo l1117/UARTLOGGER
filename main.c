@@ -37,7 +37,7 @@
 //#include "app_uart.h"
 #include "simple_uart.h"
 #include "app_util_platform.h"
-#include "bsp.h"
+//#include "bsp.h"
 #include "pstorage.h"
 //#include "app_scheduler.h"
 #include "ble_bas.h"
@@ -52,7 +52,8 @@ static uint16_t adv_interval =  1600;
 #define APP_ADV_TIMEOUT_IN_SECONDS      0    //180                                         /**< The advertising timeout (in units of seconds). */
 
 #define APP_TIMER_PRESCALER             0                                      /**< Value of the RTC1 PRESCALER register. */
-#define APP_TIMER_MAX_TIMERS            (2 + BSP_APP_TIMERS_NUMBER)                 /**< Maximum number of simultaneously created timers. */
+//#define APP_TIMER_MAX_TIMERS            (2 + BSP_APP_TIMERS_NUMBER)                 /**< Maximum number of simultaneously created timers. */
+#define APP_TIMER_MAX_TIMERS            (3)                 /**< Maximum number of simultaneously created timers. */
 #define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
 
 #define APP_GPIOTE_MAX_USERS            1                                           /**< Maximum number of simultaneously GPIOTE users. */
@@ -82,13 +83,11 @@ static uint16_t adv_interval =  1600;
 #define UART_RX_BUF_SIZE                256                                         /**< UART RX buffer size. */
 
 static ble_gap_sec_params_t             m_sec_params;                               /**< Security requirements for this application. */
-static ble_nus_t                        m_nus;                                      /**< Structure to identify the Nordic UART Service. */
 static uint16_t                         m_conn_handle = BLE_CONN_HANDLE_INVALID;    /**< Handle of the current connection. */
 //static ble_gatts_char_handles_t m_char_handles;                                     /**< Handles of local characteristic (as provided by the BLE stack).*/
 static uint16_t                  m_service_handle;                                   /**< Handle of local service (as provided by the BLE stack).*/
 static bool                      m_is_notifying_enabled = false;                     /**< Variable to indicate whether the notification is enabled by the peer.*/
-static app_timer_id_t            m_conn_int_timer_id;                                /**< Connection interval timer. */
-static app_timer_id_t            m_notif_timer_id;                                   /**< Notification timer. */
+//static app_timer_id_t            m_notif_timer_id;                                   /**< Notification timer. */
 static ble_bas_t                        m_bas;                                     /**< Structure used to identify the battery service. */
 
 
@@ -106,10 +105,8 @@ uint32_t baudrate_select = 1200;
 uint32_t data_periodic = 				256; //16;  //180;    //60;
 static uint32_t timer_counter = 0;
 static uint8_t data_array[32];  //[BLE_NUS_MAX_DATA_LEN+4];   //+4 for timecounter
-static uint16_t data_index = 8;  //[0:3]time_counter
 #define PSTORAGE_PAGE_SIZE		1024
 #define DATA_LOG_LEN					16
-static uint8_t pstorage_wait_flag = 0;
 static pstorage_block_t pstorage_wait_handle = 0;
 static pstorage_handle_t       flash_base_handle;
 static uint32_t 	pstorage_block_id, pstorage_next_adv;
@@ -296,7 +293,7 @@ static void advertising_init(void)
     static uint8_t       flags = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
     static ble_advdata_manuf_data_t  manuf_data;
 
-    ble_uuid_t adv_uuids[] = {{BLE_UUID_NUS_SERVICE, m_nus.uuid_type}};
+//    ble_uuid_t adv_uuids[] = {{BLE_UUID_NUS_SERVICE, m_nus.uuid_type}};
 
     memset(&advdata, 0, sizeof(advdata));
     advdata.name_type               = BLE_ADVDATA_SHORT_NAME;
@@ -307,10 +304,13 @@ static void advertising_init(void)
 //    advdata.uuids_complete.p_uuids  = adv_uuids;
     memset(&scanrsp, 0, sizeof(scanrsp));
 		manuf_data.company_identifier   = 0x5881;
-		manuf_data.data.size						= BLE_NUS_MAX_DATA_LEN+6;
+		manuf_data.data.size						= 24;  //BLE_NUS_MAX_DATA_LEN+6;
 		manuf_data.data.p_data    			= data_array;
 		scanrsp.p_manuf_specific_data		= &manuf_data;
-    *(uint32_t *)(data_array+20) = *(uint32_t *)device_name;
+    data_array[20] = device_name[0];
+    data_array[21] = device_name[1];
+    data_array[22] = device_name[2];
+    data_array[23] = device_name[3];
 		*(uint32_t *)(data_array) = timer_counter;      
 
     err_code = ble_advdata_set(&advdata, &scanrsp);
@@ -380,7 +380,7 @@ static void get_data(void)
 		*(uint32_t *)(log_data) = timer_counter;      
 		*(uint16_t *)(log_data+10) = battery_start(ADC_AIN);
 		*(uint32_t *)(log_data+12) = nrf_temp;
-		err_code = pstorage_store(&flash_handle, (uint8_t * )(log_data), DATA_LOG_LEN, 0 );
+		err_code = pstorage_store(&flash_handle, log_data, DATA_LOG_LEN, 0 );
 		APP_ERROR_CHECK(err_code);
 //		if (*(uint16_t *)(data_array+18) == 0xFFFF) {
 //				pstorage_next_adv++;
@@ -539,8 +539,7 @@ static void conn_params_init(void)
 static void weakup_meantimeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
-    uint32_t err_code;
-		err_code = sd_ble_gap_adv_stop();
+		sd_ble_gap_adv_stop();
 	  adv_interval = 1600;
 	  advertising_start(adv_interval , 10);
 //	  APP_ERROR_CHECK(err_code);
@@ -574,6 +573,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 											  if (!(pstorage_next_adv < pstorage_block_id)) {
 															err_code = sd_ble_gap_adv_stop();
 															app_timer_stop(weakup_meantimer_id);
+															adv_interval = 0;
 												}
 												else { 
 															app_timer_stop(weakup_meantimer_id);
@@ -581,7 +581,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 															if ((adv_interval > 200) && ((pstorage_block_id - pstorage_next_adv) > 16)){
 																		sd_ble_gap_adv_stop();
 																		adv_interval = 150;
-																		advertising_start(adv_interval, data_periodic);
+																		advertising_start(adv_interval, 10);
 			//															advertising_start(160, 0);
 			//															break;  //for not to be lost records;
 															}
@@ -589,6 +589,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 									}	else 	{
 											err_code = sd_ble_gap_adv_stop();
 											app_timer_stop(weakup_meantimer_id);
+											adv_interval = 0;
 											}
 								}
 						break;
@@ -668,6 +669,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
         case BLE_GAP_EVT_TIMEOUT:
             if (p_ble_evt->evt.gap_evt.params.timeout.src == BLE_GAP_TIMEOUT_SRC_ADVERTISING)
             { 
+							adv_interval = 0;
 ////                err_code = bsp_indication_set(BSP_INDICATE_IDLE);
 ////                APP_ERROR_CHECK(err_code);
 ////                // Configure buttons with sense level low as wakeup source.
@@ -802,7 +804,8 @@ static void weakup_timeout_handler(void * p_context)
 				adv_interval = 1600;
 			  advertising_start(adv_interval, 10);
 				}
-		 if (connect_time_out){
+		 else if (adv_interval >= 1600) advertising_init();  //updata timercounter
+		 else if (connect_time_out){
 				connect_time_out--;
 				if (!connect_time_out){
 						err_code = sd_ble_gap_disconnect(m_conn_handle,BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
@@ -810,7 +813,7 @@ static void weakup_timeout_handler(void * p_context)
 					 m_conn_handle = BLE_CONN_HANDLE_INVALID;
 						}
 				}
-		else advertising_init();
+//		else advertising_init();
 
     // Into next connection interval. Send one notification.
 //				char_notify();
@@ -821,7 +824,9 @@ static void example_cb_handler(pstorage_handle_t  * handle,
                                uint8_t            * p_data,
                                uint32_t             data_len)
 {
-		if(handle->block_id == pstorage_wait_handle) { pstorage_wait_flag = 0; }  //If we are waiting for this callback, clear the wait flag.
+		if(handle->block_id == pstorage_wait_handle) { 
+//				pstorage_wait_flag = 0; 
+		}  //If we are waiting for this callback, clear the wait flag.
 }
 
 
@@ -833,7 +838,7 @@ int main(void)
     uint32_t err_code;
     // Initialize.
     APP_TIMER_INIT(APP_TIMER_PRESCALER, APP_TIMER_MAX_TIMERS, APP_TIMER_OP_QUEUE_SIZE, false);
-		static app_timer_id_t            weakup_id;         
+		static app_timer_id_t       weakup_id;         
     err_code = app_timer_create(&weakup_id,
                                 APP_TIMER_MODE_REPEATED,
                                 weakup_timeout_handler);
@@ -842,8 +847,7 @@ int main(void)
                                 APP_TIMER_MODE_SINGLE_SHOT,
                                 weakup_meantimeout_handler);
     APP_ERROR_CHECK(err_code);
-
-    APP_GPIOTE_INIT(APP_GPIOTE_MAX_USERS);
+//    APP_GPIOTE_INIT(APP_GPIOTE_MAX_USERS);
     ble_stack_init();
 //			NRF_GPIO->PIN_CNF[10] = (GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos)
 //																							| (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
@@ -853,14 +857,15 @@ int main(void)
 //		nrf_gpio_pin_clear(10);
 
 		NRF_GPIO->PIN_CNF[UART_POWER] = (GPIO_PIN_CNF_SENSE_Disabled << GPIO_PIN_CNF_SENSE_Pos)
-                                            | (GPIO_PIN_CNF_DRIVE_H0H1 << GPIO_PIN_CNF_DRIVE_Pos)
+//                                            | (GPIO_PIN_CNF_DRIVE_H0H1 << GPIO_PIN_CNF_DRIVE_Pos)
+                                            | (GPIO_PIN_CNF_DRIVE_S0S1 << GPIO_PIN_CNF_DRIVE_Pos)
                                             | (GPIO_PIN_CNF_PULL_Disabled << GPIO_PIN_CNF_PULL_Pos)
                                             | (GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
                                             | (GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos);
 		nrf_gpio_pin_clear (UART_POWER);
 		nrf_delay_ms(200);
-		#define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
-		#define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
+//		#define SCHED_MAX_EVENT_DATA_SIZE       sizeof(app_timer_event_t)                   /**< Maximum size of scheduler events. Note that scheduler BLE stack events do not contain any data, as the events are being pulled from the stack in the event handler. */
+//		#define SCHED_QUEUE_SIZE                10                                          /**< Maximum number of events in the scheduler queue. */
 
 //    APP_SCHED_INIT(SCHED_MAX_EVENT_DATA_SIZE, SCHED_QUEUE_SIZE);
 		pstorage_module_param_t		 param;
@@ -879,10 +884,11 @@ int main(void)
 		      pstorage_load(data_array+4, &flash_handle, DATA_LOG_LEN, 0);
 					APP_ERROR_CHECK(err_code);
 					if (*(uint64_t * )(data_array+8) == 0xffffffffffffffff) break;
+					timer_counter = (uint32_t)data_array;
 		}
-		timer_counter = pstorage_block_id * data_periodic;
+//		timer_counter = pstorage_block_id * data_periodic;
 //test code end. 		
-		if (!(pstorage_block_id % 32)){
+		if (!(pstorage_block_id % 64)){
 					err_code = pstorage_block_identifier_get(&flash_base_handle, pstorage_block_id, &flash_handle);
 					APP_ERROR_CHECK(err_code);
 					err_code = pstorage_clear(&flash_handle, PSTORAGE_PAGE_SIZE);
@@ -892,16 +898,16 @@ int main(void)
     service_add();
     conn_params_init();
     sec_params_init();
+    err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER), NULL);
 //    printf("%s",start_string);
 //		*(uint16_t *)(data_array+18)=0xffff;  //tell on_event not to be load again.
 		get_data();
 		pstorage_load(data_array+4, &flash_base_handle, DATA_LOG_LEN, 0);
-    advertising_init();
+//    advertising_init();
 		pstorage_block_id ++;
 //    pstorage_load(data_array+4, &flash_base_handle, DATA_LOG_LEN, 0);
 //		*(uint32_t *)data_array = timer_counter;
     advertising_start(adv_interval, data_periodic);
-    err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER), NULL);
     // Enter main loop.
     for (;;)
     {

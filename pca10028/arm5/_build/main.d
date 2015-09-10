@@ -46,9 +46,6 @@
 .\_build\main.o: ..\..\simple_uart.h
 .\_build\main.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\util\app_util_platform.h
 .\_build\main.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\util\app_error.h
-.\_build\main.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Examples\8.0.0\bsp\bsp.h
-.\_build\main.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Examples\8.0.0\bsp\boards.h
-.\_build\main.o: C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Examples\8.0.0\bsp\pca10028.h
 .\_build\main.o: C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE\nRF_Drivers\nRF51822_xxAA\pstorage.h
 .\_build\main.o: C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE\nRF_Drivers\nRF51822_xxAA\pstorage_platform.h
 .\_build\main.o: ..\..\ble_bas.h
