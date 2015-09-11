@@ -8,34 +8,10 @@ Project File Date:  09/10/2015
 
 <h2>Output:</h2>
 Build target 'nrf51822_xxac_s110'
-compiling main.c...
-..\..\main.c(250): warning:  #177-D: variable "gap_conn_params" was declared but never referenced
-      ble_gap_conn_params_t   gap_conn_params;
-..\..\main.c(558): warning:  #177-D: variable "s_sec_keyset" was declared but never referenced
-      static ble_gap_sec_keyset_t      s_sec_keyset;
-..\..\main.c(559): warning:  #177-D: variable "p_enc_info" was declared but never referenced
-      ble_gap_enc_info_t *             p_enc_info;
-..\..\main.c(869): warning:  #223-D: function "nrf_delay_ms" declared implicitly
-                nrf_delay_ms(200);
-..\..\main.c(921): warning:  #68-D: integer conversion resulted in a change of sign
-                timer_counter = -1;
-..\..\main.c(85): warning:  #550-D: variable "m_sec_params" was set but never used
-  static ble_gap_sec_params_t             m_sec_params;                               /**< Security requirements for this application. */
-..\..\main.c(211): warning:  #177-D: function "on_write" was declared but never referenced
-  static void on_write(ble_evt_t * p_ble_evt)
-..\..\main.c(247): warning:  #177-D: function "gap_params_init" was declared but never referenced
-  static void gap_params_init(void)
-..\..\main.c(396): warning:  #177-D: function "service_add" was declared but never referenced
-  static void service_add(void)
-..\..\main.c(473): warning:  #177-D: function "sec_params_init" was declared but never referenced
-  static void sec_params_init(void)
-..\..\main.c(519): warning:  #177-D: function "conn_params_init" was declared but never referenced
-  static void conn_params_init(void)
-..\..\main.c: 11 warnings, 0 errors
 linking...
-Program Size: Code=12224 RO-data=288 RW-data=188 ZI-data=3188  
+Program Size: Code=12100 RO-data=288 RW-data=172 ZI-data=3108  
 FromELF: creating hex file...
-".\_build\nrf51422_xxac_s110.axf" - 0 Error(s), 11 Warning(s).
+".\_build\nrf51422_xxac_s110.axf" - 0 Error(s), 0 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -241,7 +217,8 @@ Erase Done.
 Programming Done.
 Verify OK.
 Application running ...
-ice "NRF51822_XXAA" selected.
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
 Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
 * JLink Info: Device "NRF51822_XXAA" selected.
  
@@ -253,34 +230,21 @@ Hardware: V7.00
 S/N : 20090928 
 Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
  
-* JLink Info: Found SWD-DP with ID 0x0BB11477
-* JLink Info: Found Cortex-M0 r0p0, Little endian.
-* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
-* JLink Info: CoreSight components:
-* JLink Info: ROMTbl 0 @ F0000000
-* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
-* JLink Info: ROMTbl 1 @ E00FF000
-* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
-* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
-* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
-* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
-ROMTableAddr = 0xE00FF003
+Error: Flash Download failed  -  Target DLL has been cancelled
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
  
-Target info:
+JLink info:
 ------------
-Device: nRF51822_xxAA
-VTarget = 3.300V
-State of Pins: 
-TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
-Hardware-Breakpoints: 4
-Software-Breakpoints: 8192
-Watchpoints:          2
-JTAG speed: 2000 kHz
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
  
-Erase Done.
-Programming Done.
-Verify OK.
-Application running ...
+Error: Flash Download failed  -  Target DLL has been cancelled
 Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
 * JLink Info: Device "NRF51822_XXAA" selected.
 Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
@@ -470,6 +434,67 @@ Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull
 * JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
 * JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
 ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+</pre>
+</body>
+</html>
+
  
 Target info:
 ------------
