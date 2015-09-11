@@ -4,22 +4,38 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\ble_app_uart_s110_pca10028.uvprojx
-Project File Date:  09/07/2015
+Project File Date:  09/10/2015
 
 <h2>Output:</h2>
 Build target 'nrf51822_xxac_s110'
 compiling main.c...
-..\..\main.c(866): warning:  #223-D: function "nrf_delay_ms" declared implicitly
+..\..\main.c(250): warning:  #177-D: variable "gap_conn_params" was declared but never referenced
+      ble_gap_conn_params_t   gap_conn_params;
+..\..\main.c(558): warning:  #177-D: variable "s_sec_keyset" was declared but never referenced
+      static ble_gap_sec_keyset_t      s_sec_keyset;
+..\..\main.c(559): warning:  #177-D: variable "p_enc_info" was declared but never referenced
+      ble_gap_enc_info_t *             p_enc_info;
+..\..\main.c(869): warning:  #223-D: function "nrf_delay_ms" declared implicitly
                 nrf_delay_ms(200);
-..\..\main.c: 1 warning, 0 errors
+..\..\main.c(921): warning:  #68-D: integer conversion resulted in a change of sign
+                timer_counter = -1;
+..\..\main.c(85): warning:  #550-D: variable "m_sec_params" was set but never used
+  static ble_gap_sec_params_t             m_sec_params;                               /**< Security requirements for this application. */
+..\..\main.c(211): warning:  #177-D: function "on_write" was declared but never referenced
+  static void on_write(ble_evt_t * p_ble_evt)
+..\..\main.c(247): warning:  #177-D: function "gap_params_init" was declared but never referenced
+  static void gap_params_init(void)
+..\..\main.c(396): warning:  #177-D: function "service_add" was declared but never referenced
+  static void service_add(void)
+..\..\main.c(473): warning:  #177-D: function "sec_params_init" was declared but never referenced
+  static void sec_params_init(void)
+..\..\main.c(519): warning:  #177-D: function "conn_params_init" was declared but never referenced
+  static void conn_params_init(void)
+..\..\main.c: 11 warnings, 0 errors
 linking...
-.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_error.o ignored.
-.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_gpiote.o ignored.
-.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_timer.o ignored.
-Program Size: Code=14820 RO-data=288 RW-data=216 ZI-data=5424  
-Finished: 0 information, 3 warning and 0 error messages.
+Program Size: Code=12224 RO-data=288 RW-data=188 ZI-data=3188  
 FromELF: creating hex file...
-".\_build\nrf51422_xxac_s110.axf" - 0 Error(s), 4 Warning(s).
+".\_build\nrf51422_xxac_s110.axf" - 0 Error(s), 11 Warning(s).
 
 <h2>Software Packages used:</h2>
 
@@ -31,13 +47,13 @@ Package Vendor: ARM
 
 Package Vendor: NordicSemiconductor
                 http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_BLE/NordicSemiconductor.nRF_BLE.2.0.0.pack
-                NordicSemiconductor::nRF_BLE:BLE_Modules:ble_common:2.0.0
+                NordicSemiconductor::nRF_BLE:BLE_Modules:ble_service_common:2.0.0
                 Bluetooth Low Energy (Bluetooth Smart) services and software modules for Nordic Semiconductor nRF family.
-   * Component: ble_common Version: 2.0.0
    * Component: ble_service_common Version: 2.0.0
-   * Component: ble_advdata Version: 2.0.0
-   * Component: ble_conn_params Version: 2.0.0
    * Component: ble_nus Version: 2.0.0
+   * Component: ble_conn_params Version: 2.0.0
+   * Component: ble_advdata Version: 2.0.0
+   * Component: ble_common Version: 2.0.0
 
 Package Vendor: NordicSemiconductor
                 http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/NordicSemiconductor.nRF_DeviceFamilyPack.7.2.1.pack
@@ -60,13 +76,16 @@ Package Vendor: NordicSemiconductor
                 Software modules for Nordic Semiconductor nRF family.
    * Component: app_error Version: 2.0.0
    * Component: app_gpiote Variant: default Version: 2.0.0
-   * Component: app_timer Variant: default Version: 2.0.0
    * Component: nrf_assert Version: 2.0.0
+   * Component: app_timer Variant: default Version: 2.0.0
+   * Component: app_util Variant: default Version: 2.0.0
 
 Package Vendor: NordicSemiconductor
                 http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_SoftDevice_Common/NordicSemiconductor.nRF_SoftDevice_Common.1.1.2.pack
-                NordicSemiconductor::nRF_SoftDevice:softdevice_hex:S110:1.1.2
+                NordicSemiconductor::nRF_SoftDevice:Internal:softdevice_present:1.1.2
                 Common components for Nordic Semiconductor nRF family SoftDevices.
+   * Component: softdevice_present Version: 1.1.2
+   * Component: sd_common Variant: default Version: 1.1.2
    * Component: softdevice_hex Variant: S110 Version: 1.1.2
 
 Package Vendor: NordicSemiconductor
@@ -75,9 +94,6 @@ Package Vendor: NordicSemiconductor
                 Components for Bluetooth Low Energy (Bluetooth Smart) S110 SoftDevice for Nordic Semiconductor nRF family.
    * Component: s110_hex Version: 8.0.0
    * Component: s110 Variant: default Version: 8.0.0
-   * Component: app_util Variant: default Version: 2.0.0
-   * Component: sd_common Variant: default Version: 1.1.2
-   * Component: softdevice_present Version: 1.1.2
 
 <h2>Collection of Component include folders:</h2>
   C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE
@@ -100,32 +116,32 @@ Package Vendor: NordicSemiconductor
 
    * Component: ARM::CMSIS:CORE:3.20.0
 
-   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_common:2.0.0
-
    * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_service_common:2.0.0
       Source file:   common\ble_srv_common.c
       Include file:  common\ble_srv_common.h
-
-   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_advdata:2.0.0
-      Include file:  common\ble_advdata.h
-      Source file:   common\ble_advdata.c
-
-   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_conn_params:2.0.0
-      Source file:   common\ble_conn_params.c
-      Include file:  common\ble_conn_params.h
 
    * Component: NordicSemiconductor::nRF_BLE:BLE_Services:ble_nus:2.0.0
       Include file:  ble_services\ble_nus\ble_nus.h
       Source file:   ble_services\ble_nus\ble_nus.c
 
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_conn_params:2.0.0
+      Source file:   common\ble_conn_params.c
+      Include file:  common\ble_conn_params.h
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_advdata:2.0.0
+      Source file:   common\ble_advdata.c
+      Include file:  common\ble_advdata.h
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_common:2.0.0
+
    * Component: NordicSemiconductor::Device:Startup:7.2.1
-      Source file:   Device\Source\arm\arm_startup_nrf51.s
       Source file:   Device\Source\system_nrf51.c
+      Source file:   Device\Source\arm\arm_startup_nrf51.s
       Include file:  Device\Include\system_nrf51.h
 
    * Component: NordicSemiconductor::nRF_Drivers:nrf_delay:2.0.0
-      Source file:   hal\nrf_delay.c
       Include file:  hal\nrf_delay.h
+      Source file:   hal\nrf_delay.c
 
    * Component: NordicSemiconductor::nRF_Drivers:nrf_gpio:2.0.0
       Include file:  hal\nrf_gpio.h
@@ -133,57 +149,57 @@ Package Vendor: NordicSemiconductor
    * Component: NordicSemiconductor::nRF_Drivers:nrf_error:default:2.0.0
 
    * Component: NordicSemiconductor::nRF_Drivers:pstorage:default:2.0.0
-      Include file:  pstorage\pstorage.h
       Source file:   pstorage\pstorage.c
       Include file:  pstorage\config\pstorage_platform.h
+      Include file:  pstorage\pstorage.h
 
    * Component: NordicSemiconductor::nRF_Libraries:app_error:2.0.0
-      Source file:   util\app_error.c
       Include file:  util\app_error.h
+      Source file:   util\app_error.c
 
    * Component: NordicSemiconductor::nRF_Libraries:app_gpiote:default:2.0.0
-      Source file:   gpiote\app_gpiote.c
       Include file:  gpiote\app_gpiote.h
-
-   * Component: NordicSemiconductor::nRF_Libraries:app_timer:default:2.0.0
-      Source file:   timer\app_timer.c
-      Include file:  timer\app_timer.h
+      Source file:   gpiote\app_gpiote.c
 
    * Component: NordicSemiconductor::nRF_Libraries:nrf_assert:2.0.0
       Source file:   util\nrf_assert.c
       Include file:  util\nrf_assert.h
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_timer:default:2.0.0
+      Include file:  timer\app_timer.h
+      Source file:   timer\app_timer.c
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_util:default:2.0.0
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:softdevice_present:1.1.2
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:sd_common:default:1.1.2
+      Source file:   softdevice_handler\softdevice_handler.c
 
    * Component: NordicSemiconductor::nRF_SoftDevice:softdevice_hex:S110:1.1.2
 
    * Component: NordicSemiconductor::nRF_SoftDevice:s110_hex:8.0.0
 
    * Component: NordicSemiconductor::nRF_SoftDevice:s110:default:8.0.0
-      Include file:  headers\ble_ranges.h
+      Include file:  headers\ble.h
+      Include file:  headers\nrf_error_soc.h
+      Include file:  headers\ble_err.h
+      Include file:  headers\ble_gattc.h
+      Include file:  headers\ble_l2cap.h
       Include file:  headers\nrf_error.h
-      Include file:  headers\nrf_soc.h
+      Include file:  headers\nrf_mbr.h
+      Include file:  headers\nrf_svc.h
+      Include file:  headers\ble_gap.h
+      Include file:  headers\ble_hci.h
+      Include file:  headers\ble_types.h
       Include file:  headers\ble_gatts.h
+      Include file:  headers\ble_gatt.h
+      Include file:  headers\nrf_soc.h
+      Include file:  headers\ble_ranges.h
+      Include file:  headers\nrf_error_sdm.h
+      Include file:  headers\nrf_sdm.h
       Include file:  headers\softdevice_assert.h
       Include file:  headers\nrf_sd_def.h
-      Include file:  headers\nrf_error_soc.h
-      Include file:  headers\nrf_sdm.h
-      Include file:  headers\ble_l2cap.h
-      Include file:  headers\ble_types.h
-      Include file:  headers\ble_gatt.h
-      Include file:  headers\ble_hci.h
-      Include file:  headers\ble_gap.h
-      Include file:  headers\ble_gattc.h
-      Include file:  headers\nrf_mbr.h
-      Include file:  headers\ble.h
-      Include file:  headers\ble_err.h
-      Include file:  headers\nrf_svc.h
-      Include file:  headers\nrf_error_sdm.h
-
-   * Component: NordicSemiconductor::nRF_Libraries:app_util:default:2.0.0
-
-   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:sd_common:default:1.1.2
-      Source file:   softdevice_handler\softdevice_handler.c
-
-   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:softdevice_present:1.1.2
 Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
 * JLink Info: Device "NRF51822_XXAA" selected.
 Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
@@ -197,9 +213,35 @@ Hardware: V7.00
 S/N : 20090928 
 Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
  
-Error: Flash Download failed  -  Target DLL has been cancelled
-Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
-* JLink Info: Device "NRF51822_XXAA" selected.
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+ice "NRF51822_XXAA" selected.
 Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
 * JLink Info: Device "NRF51822_XXAA" selected.
  
@@ -526,9 +568,131 @@ Erase Done.
 Programming Done.
 Verify OK.
 Application running ...
-</pre>
-</body>
-</html>
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
 Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
 * JLink Info: Device "NRF51822_XXAA" selected.
  
