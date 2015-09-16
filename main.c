@@ -49,6 +49,7 @@
 
 #define APP_ADV_INTERVAL                1600*1  //0x4000                                        /**< 10.24 secs  The advertising interval (in units of 0.625 ms. This value corresponds to 40 ms). */
 static uint16_t adv_interval =  1600;
+static uint16_t timer_adv_interval = 0;
 #define APP_ADV_TIMEOUT_IN_SECONDS      0    //180                                         /**< The advertising timeout (in units of seconds). */
 
 #define APP_TIMER_PRESCALER             0                                      /**< Value of the RTC1 PRESCALER register. */
@@ -77,15 +78,13 @@ static uint16_t adv_interval =  1600;
 
 #define DEAD_BEEF                       0xDEADBEEF                                  /**< Value used as error code on stack dump, can be used to identify stack location on stack unwind. */
 
-#define UART_POWER  	 8  //3       //5TM Power
+#define UART_POWER  	 12 //8  //3       //5TM Power
 //#define DEVICE_NAME                     "CSTDataLog"                               /**< Name of device. Will be included in the advertising data. */
-uint8_t device_name[15]  = "5T:" ;
+//uint8_t device_name[15]  = "5T:" ;
 uint32_t baudrate_select = 1200;
 //#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput5  //pin04   BEACON
 #define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin03  
-	
 #define LED_POWER  				      20
-#define COUNTER_STEP            18  
 //#define DATA_PERIODIC         300
 uint32_t data_periodic = 				256; //16;  //180;    //60;
 static uint32_t timer_counter = 0;
@@ -98,6 +97,7 @@ static uint32_t 	pstorage_block_id, pstorage_next_adv;
 static pstorage_handle_t 				flash_handle ;
 static app_timer_id_t  					weakup_meantimer_id	;
 static app_timer_id_t           weakup_id;         
+static uint16_t 	company_id = 0x5888;
 #define ADC_REF_VOLTAGE_IN_MILLIVOLTS        1200                                      /**< Reference voltage (in milli volts) used by ADC while doing conversion. */
 #define ADC_PRE_SCALING_COMPENSATION         3                                         /**< The ADC is configured to use VDD with 1/3 prescaling as input. And hence the result of conversion is to be multiplied by 3 to get the actual value of the battery voltage.*/
 #define DIODE_FWD_VOLT_DROP_MILLIVOLTS       270                                       /**< Typical forward voltage drop of the diode (Part no: SD103ATW-7-F) that is connected in series with the voltage supply. This is the voltage drop when the forward current is 1mA. Source: Data sheet of 'SURFACE MOUNT SCHOTTKY BARRIER DIODE ARRAY' available at www.diodes.com. */
@@ -175,16 +175,16 @@ static void advertising_init(void)
 //    advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
 //    advdata.uuids_complete.p_uuids  = adv_uuids;
     memset(&scanrsp, 0, sizeof(scanrsp));
-		manuf_data.company_identifier   = 0x5881;
+		manuf_data.company_identifier   = company_id; //0x5881;
 		manuf_data.data.size						= 24;  //BLE_NUS_MAX_DATA_LEN+6;
 		manuf_data.data.p_data    			= data_array;
 		scanrsp.p_manuf_specific_data		= &manuf_data;
-    data_array[20] = device_name[0];
-    data_array[21] = device_name[1];
-    data_array[22] = device_name[2];
-    data_array[23] = device_name[3];
-		*(uint32_t *)(data_array) = timer_counter;      
-
+//		advdata.p_manuf_specific_data		= &manuf_data;
+    data_array[20] = '5';
+    data_array[21] = 'T';
+    data_array[22] = 'M';
+    data_array[23] = '-';
+		*(uint32_t *)(data_array) = timer_counter + timer_adv_interval /1600;      
     err_code = ble_advdata_set(&advdata, &scanrsp);
     APP_ERROR_CHECK(err_code);
 }
@@ -214,17 +214,20 @@ static void get_data(void)
     uint8_t uart_index = 0, cr;
     uint32_t err_code;
 		NRF_UART0->POWER = (UART_POWER_POWER_Enabled << UART_POWER_POWER_Pos);
-		simple_uart_config(NULL, 4, NULL, 16, false);
+//		simple_uart_config(NULL, 4, NULL, 16, false);
+		simple_uart_config(NULL, 16, NULL, 4, false);
 		nrf_gpio_pin_set (UART_POWER);												//Open power and UART for 5TM 
 		while (simple_uart_get_with_timeout(4, &cr));					//clear RX buffer, must be!
 		memset(uart_data,0,16);
-		memset(log_data,0,16);
+//		memset(log_data,0,16);
+		memset(data_array,0,20);
 		for (uint8_t i=0; i<50; i++){										//Get date from 5tm 
 				if (simple_uart_get_with_timeout(4, &cr))  {
 						uart_data[uart_index++] = cr;
 						if ((uart_data[uart_index - 1] == '\n') || ((uart_index) >= 16))
 								{
-										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(log_data+4),(uint16_t *)(log_data+6),(uint16_t *)(log_data+8));
+//										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(log_data+4),(uint16_t *)(log_data+6),(uint16_t *)(log_data+8));
+										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(data_array+8),(uint16_t *)(data_array+10),(uint16_t *)(data_array+12));
 										break;
 										}
 						}
@@ -233,18 +236,25 @@ static void get_data(void)
 		nrf_gpio_pin_clear (UART_POWER);
 		int32_t nrf_temp;
 		sd_temp_get(&nrf_temp);  													//Get Cpu tempreature
-		*(uint32_t *)(log_data) = timer_counter;      
-		*(uint16_t *)(log_data+10) = battery_start(ADC_AIN);
-		*(uint32_t *)(log_data+12) = nrf_temp;
-		err_code = pstorage_store(&flash_handle, log_data, DATA_LOG_LEN, 0 );
+//		*(uint32_t *)(log_data) = timer_counter;      
+//		*(uint16_t *)(log_data+10) = battery_start(ADC_AIN);
+//		*(uint32_t *)(log_data+12) = nrf_temp;
+//		err_code = pstorage_store(&flash_handle, log_data, DATA_LOG_LEN, 0 );
+		*(uint32_t *)(data_array +4) = timer_counter;      
+		*(uint16_t *)(data_array+14) = battery_start(ADC_AIN);
+		*(uint32_t *)(data_array+16) = nrf_temp;
+		err_code = pstorage_store(&flash_handle, data_array + 4 , DATA_LOG_LEN, 0 );
 		APP_ERROR_CHECK(err_code);
+		company_id = 0x5888;
 }
 
 static void weakup_meantimeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
 		sd_ble_gap_adv_stop();
+		company_id = 0x5888;
 	  adv_interval = 1600;
+	  advertising_init();
 	  advertising_start(adv_interval , 10);
 //	  APP_ERROR_CHECK(err_code);
 //		adv_sleep_secs = 1800; //10;
@@ -262,29 +272,28 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 				case BLE_GAP_EVT_SCAN_REQ_REPORT:
 						if (p_ble_evt->evt.gap_evt.params.scan_req_report.peer_addr.addr[0] == 0x58 && 
 									p_ble_evt->evt.gap_evt.params.scan_req_report.peer_addr.addr[1] == 0x81){
+								if (company_id == 0x5882) pstorage_next_adv ++;
+								else company_id = 0x5882;  
 								 if (pstorage_next_adv < pstorage_block_id){
 												err_code = pstorage_block_identifier_get(&flash_base_handle,(pstorage_next_adv
 														% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)), &flash_handle);
 												APP_ERROR_CHECK(err_code);
 												pstorage_load(data_array+4, &flash_handle, DATA_LOG_LEN, 0);
 												*(uint16_t *)(data_array+18) = (uint16_t)(pstorage_block_id - pstorage_next_adv);
-												advertising_init();
-												pstorage_next_adv ++;
-											  if (!(pstorage_next_adv < pstorage_block_id)) {
-															err_code = sd_ble_gap_adv_stop();
-															app_timer_stop(weakup_meantimer_id);
-															adv_interval = 0;
-												}
-												else { 
+//												advertising_init();
+//											  if (!(pstorage_next_adv < pstorage_block_id)) {
+//															err_code = sd_ble_gap_adv_stop();
+//															app_timer_stop(weakup_meantimer_id);
+//												}
+//												else { 
 															app_timer_stop(weakup_meantimer_id);
 															app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(1100, 0), NULL);
 															if ((adv_interval > 200) && ((pstorage_block_id - pstorage_next_adv) > 16)){
 																		sd_ble_gap_adv_stop();
 																		adv_interval = BLE_GAP_ADV_NONCON_INTERVAL_MIN;   //not less then 160 will cause err_code 007  in BLE_GAP_ADV_TYPE_ADV_SCAN_IND mode.
 																		advertising_start(adv_interval, 100);
-			//															break;  //for not to be lost records;
 															}
-												}
+//												}
 									}	else 	{
 											err_code = sd_ble_gap_adv_stop();
 											app_timer_stop(weakup_meantimer_id);
@@ -350,8 +359,11 @@ static void weakup_timeout_handler(void * p_context)
 {
     UNUSED_PARAMETER(p_context);
 		uint16_t err_code;
-		timer_counter ++;
-		if (!(timer_counter % data_periodic)) {
+		timer_counter +=data_periodic;
+		timer_adv_interval = 0;
+		sd_ble_gap_adv_stop();
+
+//		if (!(timer_counter % data_periodic)) {
 				err_code = pstorage_block_identifier_get(&flash_base_handle,(pstorage_block_id
 							% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)), &flash_handle);
 				APP_ERROR_CHECK(err_code);
@@ -363,19 +375,15 @@ static void weakup_timeout_handler(void * p_context)
 				if (!(flash_handle.block_id % PSTORAGE_PAGE_SIZE)){
 						pstorage_clear(&flash_handle,PSTORAGE_PAGE_SIZE);
 						APP_ERROR_CHECK(err_code);
-				   if (((pstorage_block_id / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)) % PSTORAGE_MAX_APPLICATIONS )== 
+				    if (((pstorage_block_id / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)) % PSTORAGE_MAX_APPLICATIONS )== 
 											((pstorage_next_adv / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)) % PSTORAGE_MAX_APPLICATIONS ))
 													pstorage_next_adv = (pstorage_next_adv / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN) + 1) * (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN) ;
 						}
 				advertising_init();
 				adv_interval = 1600;
 			  advertising_start(adv_interval, 10);
-				}
-		 else if (adv_interval >= 1600) advertising_init();  //updata timercounter
-//		else advertising_init();
-
-    // Into next connection interval. Send one notification.
-//				char_notify();
+//				}
+//		 else if (adv_interval >= 1600) advertising_init();  //updata timercounter
 }
 static void example_cb_handler(pstorage_handle_t  * handle,
 															 uint8_t              op_code,
@@ -388,6 +396,13 @@ static void example_cb_handler(pstorage_handle_t  * handle,
 		}  //If we are waiting for this callback, clear the wait flag.
 }
 
+void ble_on_radio_active_evt(bool radio_active)
+{
+		if (radio_active) {
+			timer_adv_interval += adv_interval;
+			advertising_init();
+		}
+}
 
 /**@brief  Application main function.
  */
@@ -420,7 +435,7 @@ int main(void)
                                             | (GPIO_PIN_CNF_INPUT_Disconnect << GPIO_PIN_CNF_INPUT_Pos)
                                             | (GPIO_PIN_CNF_DIR_Output << GPIO_PIN_CNF_DIR_Pos);
 		nrf_gpio_pin_clear (UART_POWER);
-		nrf_delay_ms(200);
+//		nrf_delay_ms(200);
 		pstorage_module_param_t		 param;
 		pstorage_init();
 		param.block_size  = DATA_LOG_LEN; //PSTORAGE_PAGE_SIZE;                   //Select block size of 16 bytes
@@ -432,8 +447,16 @@ int main(void)
 		pstorage_next_adv = 0;
 		err_code = pstorage_clear(&flash_base_handle, PSTORAGE_PAGE_SIZE);
 		APP_ERROR_CHECK(err_code);
-		timer_counter = -1;
-    err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(1000, APP_TIMER_PRESCALER), NULL);
+
+//		timer_counter = -1;
+    err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(data_periodic*1000, APP_TIMER_PRESCALER), NULL);
+    APP_ERROR_CHECK(err_code);
+    err_code = ble_radio_notification_init(NRF_APP_PRIORITY_LOW,
+                                           NRF_RADIO_NOTIFICATION_DISTANCE_1740US,
+                                           ble_on_radio_active_evt);
+    APP_ERROR_CHECK(err_code);
+		timer_counter = 0 - data_periodic;
+		weakup_timeout_handler(NULL);
     for (;;)
     {
 				err_code = sd_app_evt_wait();
