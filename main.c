@@ -86,9 +86,10 @@ uint32_t baudrate_select = 1200;
 #define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin03  
 #define LED_POWER  				      20
 //#define DATA_PERIODIC         300
-uint32_t data_periodic = 				256; //16;  //180;    //60;
+uint32_t data_periodic = 				1024; //256; //16;  //180;    //60;
 static uint32_t timer_counter = 0;
-static uint8_t data_array[32];  //[BLE_NUS_MAX_DATA_LEN+4];   //+4 for timecounter
+static uint8_t data_array[32];  // flash load packet
+static uint8_t data_5888[32];  //adv broadcast packet
 #define PSTORAGE_PAGE_SIZE		1024
 #define DATA_LOG_LEN					16
 static pstorage_block_t pstorage_wait_handle = 0;
@@ -177,14 +178,20 @@ static void advertising_init(void)
     memset(&scanrsp, 0, sizeof(scanrsp));
 		manuf_data.company_identifier   = company_id; //0x5881;
 		manuf_data.data.size						= 24;  //BLE_NUS_MAX_DATA_LEN+6;
-		manuf_data.data.p_data    			= data_array;
-		scanrsp.p_manuf_specific_data		= &manuf_data;
+		if (company_id == 0x5888)  {
+			manuf_data.data.p_data	= data_5888;
+			*(uint32_t *)(data_5888) = timer_counter + timer_adv_interval /1600;      
+		}
+		else	{
+			manuf_data.data.p_data  = data_array;
+			*(uint32_t *)(data_array) = timer_counter + timer_adv_interval /1600;      
+		}
+			scanrsp.p_manuf_specific_data		= &manuf_data;
 //		advdata.p_manuf_specific_data		= &manuf_data;
     data_array[20] = '5';
     data_array[21] = 'T';
     data_array[22] = 'M';
     data_array[23] = '-';
-		*(uint32_t *)(data_array) = timer_counter + timer_adv_interval /1600;      
     err_code = ble_advdata_set(&advdata, &scanrsp);
     APP_ERROR_CHECK(err_code);
 }
@@ -220,14 +227,14 @@ static void get_data(void)
 		while (simple_uart_get_with_timeout(4, &cr));					//clear RX buffer, must be!
 		memset(uart_data,0,16);
 //		memset(log_data,0,16);
-		memset(data_array,0,20);
+		memset(data_5888,0,20);
 		for (uint8_t i=0; i<50; i++){										//Get date from 5tm 
 				if (simple_uart_get_with_timeout(4, &cr))  {
 						uart_data[uart_index++] = cr;
 						if ((uart_data[uart_index - 1] == '\n') || ((uart_index) >= 16))
 								{
 //										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(log_data+4),(uint16_t *)(log_data+6),(uint16_t *)(log_data+8));
-										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(data_array+8),(uint16_t *)(data_array+10),(uint16_t *)(data_array+12));
+										sscanf((const char *)(uart_data), "%hx%hx%hx\n",(uint16_t *)(data_5888+8),(uint16_t *)(data_5888+10),(uint16_t *)(data_5888+12));
 										break;
 										}
 						}
@@ -240,10 +247,10 @@ static void get_data(void)
 //		*(uint16_t *)(log_data+10) = battery_start(ADC_AIN);
 //		*(uint32_t *)(log_data+12) = nrf_temp;
 //		err_code = pstorage_store(&flash_handle, log_data, DATA_LOG_LEN, 0 );
-		*(uint32_t *)(data_array +4) = timer_counter;      
-		*(uint16_t *)(data_array+14) = battery_start(ADC_AIN);
-		*(uint32_t *)(data_array+16) = nrf_temp;
-		err_code = pstorage_store(&flash_handle, data_array + 4 , DATA_LOG_LEN, 0 );
+		*(uint32_t *)(data_5888 +4) = timer_counter;      
+		*(uint16_t *)(data_5888+14) = battery_start(ADC_AIN);
+		*(uint32_t *)(data_5888+16) = nrf_temp;
+		err_code = pstorage_store(&flash_handle, data_5888 + 4 , DATA_LOG_LEN, 0 );
 		APP_ERROR_CHECK(err_code);
 		company_id = 0x5888;
 }

@@ -170,6 +170,22 @@
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
+        <Bp>
+          <Number>1</Number>
+          <Type>0</Type>
+          <LineNumber>149</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>C:\Users\l1117\Documents\GitHub\UARTLOGGER\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
       </Breakpoint>
       <WatchWindow1>
         <Ww>
@@ -675,6 +691,22 @@
           <ExecCommand></ExecCommand>
           <Expression></Expression>
         </Bp>
+        <Bp>
+          <Number>18</Number>
+          <Type>0</Type>
+          <LineNumber>149</LineNumber>
+          <EnabledFlag>1</EnabledFlag>
+          <Address>0</Address>
+          <ByteObject>0</ByteObject>
+          <HtxType>0</HtxType>
+          <ManyObjects>0</ManyObjects>
+          <SizeOfObject>0</SizeOfObject>
+          <BreakByAccess>0</BreakByAccess>
+          <BreakIfRCount>0</BreakIfRCount>
+          <Filename>C:\Users\l1117\Documents\GitHub\UARTLOGGER\main.c</Filename>
+          <ExecCommand></ExecCommand>
+          <Expression></Expression>
+        </Bp>
       </Breakpoint>
       <Tracepoint>
         <THDelay>0</THDelay>
@@ -722,10 +754,10 @@
       <FileType>1</FileType>
       <tvExp>1</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>27</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>400</TopLine>
-      <CurrentLine>410</CurrentLine>
+      <TopLine>225</TopLine>
+      <CurrentLine>230</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\main.c</PathWithFileName>
       <FilenameWithoutPath>main.c</FilenameWithoutPath>
@@ -740,7 +772,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>75</TopLine>
+      <TopLine>74</TopLine>
       <CurrentLine>85</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>..\..\simple_uart.c</PathWithFileName>
@@ -844,7 +876,7 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>150</TopLine>
+      <TopLine>158</TopLine>
       <CurrentLine>160</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>RTE\Device\nRF51822_xxAA\arm_startup_nrf51.s</PathWithFileName>
@@ -994,10 +1026,10 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>50</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>64</TopLine>
+      <CurrentLine>76</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>RTE\nRF_BLE\nRF51822_xxAA\ble_advdata.h</PathWithFileName>
       <FilenameWithoutPath>ble_advdata.h</FilenameWithoutPath>
@@ -1180,8 +1212,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>422</TopLine>
-      <CurrentLine>432</CurrentLine>
+      <TopLine>0</TopLine>
+      <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>RTE\nRF_Drivers\nRF51822_xxAA\pstorage.c</PathWithFileName>
       <FilenameWithoutPath>pstorage.c</FilenameWithoutPath>
@@ -1210,10 +1242,10 @@
       <FileType>5</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>58</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>33</TopLine>
-      <CurrentLine>43</CurrentLine>
+      <TopLine>35</TopLine>
+      <CurrentLine>52</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>RTE\nRF_Drivers\nRF51822_xxAA\pstorage_platform.h</PathWithFileName>
       <FilenameWithoutPath>pstorage_platform.h</FilenameWithoutPath>
@@ -1412,8 +1444,8 @@
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>91</TopLine>
-      <CurrentLine>97</CurrentLine>
+      <TopLine>89</TopLine>
+      <CurrentLine>102</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>RTE\nRF_Libraries\nRF51822_xxAA\app_timer.h</PathWithFileName>
       <FilenameWithoutPath>app_timer.h</FilenameWithoutPath>

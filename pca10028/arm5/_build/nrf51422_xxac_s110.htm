@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\_build\nrf51422_xxac_s110.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\_build\nrf51422_xxac_s110.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Tue Sep 15 16:38:42 2015
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5040049: Last Updated: Wed Sep 30 15:06:32 2015
 <BR><P>
 <H3>Maximum Stack Usage =        272 bytes + Unknown(Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -225,6 +225,8 @@ Global Symbols
 <LI><a href="#[81]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_init
 <LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_clear
 <LI><a href="#[63]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;battery_start
+<LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weakup_timeout_handler
+<LI><a href="#[66]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;on_ble_evt
 <LI><a href="#[31]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_idivmod
 </UL>
 
@@ -513,7 +515,7 @@ Global Symbols
 <BR>[Called By]<UL><LI><a href="#[1b]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;SWI2_IRQHandler
 </UL>
 
-<P><STRONG><a name="[1f]"></a>main</STRONG> (Thumb, 412 bytes, Stack size 16 bytes, main.o(i.main))
+<P><STRONG><a name="[1f]"></a>main</STRONG> (Thumb, 414 bytes, Stack size 16 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 272<LI>Call Chain = main &rArr; weakup_timeout_handler &rArr; get_data &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[82]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_register
@@ -550,7 +552,7 @@ Global Symbols
 <LI><a href="#[28]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;weakup_timeout_handler
 </UL>
 
-<P><STRONG><a name="[81]"></a>pstorage_init</STRONG> (Thumb, 128 bytes, Stack size 24 bytes, pstorage.o(i.pstorage_init))
+<P><STRONG><a name="[81]"></a>pstorage_init</STRONG> (Thumb, 130 bytes, Stack size 24 bytes, pstorage.o(i.pstorage_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 52<LI>Call Chain = pstorage_init &rArr; pstorage_flash_page_end &rArr; __aeabi_uidivmod
 </UL>
 <BR>[Calls]<UL><LI><a href="#[6c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_flash_page_size
@@ -639,7 +641,7 @@ Global Symbols
 <H3>
 Local Symbols
 </H3>
-<P><STRONG><a name="[52]"></a>advertising_init</STRONG> (Thumb, 130 bytes, Stack size 8 bytes, main.o(i.advertising_init))
+<P><STRONG><a name="[52]"></a>advertising_init</STRONG> (Thumb, 172 bytes, Stack size 8 bytes, main.o(i.advertising_init))
 <BR><BR>[Stack]<UL><LI>Max Depth = 240<LI>Call Chain = advertising_init &rArr; ble_advdata_set &rArr; adv_data_encode &rArr; uuid_list_encode &rArr; uuid_list_sized_encode
 </UL>
 <BR>[Calls]<UL><LI><a href="#[54]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_advdata_set
@@ -706,7 +708,7 @@ Local Symbols
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_data
 </UL>
 
-<P><STRONG><a name="[66]"></a>on_ble_evt</STRONG> (Thumb, 218 bytes, Stack size 16 bytes, main.o(i.on_ble_evt))
+<P><STRONG><a name="[66]"></a>on_ble_evt</STRONG> (Thumb, 224 bytes, Stack size 16 bytes, main.o(i.on_ble_evt))
 <BR><BR>[Stack]<UL><LI>Max Depth = 104<LI>Call Chain = on_ble_evt &rArr; app_timer_start &rArr; timer_start_op_schedule &rArr; user_op_alloc
 </UL>
 <BR>[Calls]<UL><LI><a href="#[88]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_load
@@ -715,6 +717,7 @@ Local Symbols
 <LI><a href="#[5d]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_timer_start
 <LI><a href="#[46]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;app_error_handler
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advertising_start
+<LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[26]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ble_evt_dispatch
 </UL>
@@ -734,7 +737,7 @@ Local Symbols
 </UL>
 <BR>[Address Reference Count : 1]<UL><LI> main.o(i.main)
 </UL>
-<P><STRONG><a name="[28]"></a>weakup_timeout_handler</STRONG> (Thumb, 222 bytes, Stack size 16 bytes, main.o(i.weakup_timeout_handler))
+<P><STRONG><a name="[28]"></a>weakup_timeout_handler</STRONG> (Thumb, 244 bytes, Stack size 16 bytes, main.o(i.weakup_timeout_handler))
 <BR><BR>[Stack]<UL><LI>Max Depth = 256<LI>Call Chain = weakup_timeout_handler &rArr; get_data &rArr; __0sscanf &rArr; __vfscanf_char &rArr; __vfscanf &rArr; _scanf_int
 </UL>
 <BR>[Calls]<UL><LI><a href="#[83]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;pstorage_clear
@@ -743,6 +746,7 @@ Local Symbols
 <LI><a href="#[77]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;get_data
 <LI><a href="#[55]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advertising_start
 <LI><a href="#[52]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;advertising_init
+<LI><a href="#[32]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;__aeabi_uidivmod
 </UL>
 <BR>[Called By]<UL><LI><a href="#[1f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
