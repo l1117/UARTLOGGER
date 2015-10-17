@@ -52,7 +52,7 @@ static uint16_t adv_interval =  1600;
 static uint16_t timer_adv_interval = 0;
 #define APP_ADV_TIMEOUT_IN_SECONDS      0    //180                                         /**< The advertising timeout (in units of seconds). */
 
-#define APP_TIMER_PRESCALER             0                                      /**< Value of the RTC1 PRESCALER register. */
+#define APP_TIMER_PRESCALER             0x00FF  //0                                      /**< Value of the RTC1 PRESCALER register. */
 //#define APP_TIMER_MAX_TIMERS            (2 + BSP_APP_TIMERS_NUMBER)                 /**< Maximum number of simultaneously created timers. */
 #define APP_TIMER_MAX_TIMERS            (3)                 /**< Maximum number of simultaneously created timers. */
 #define APP_TIMER_OP_QUEUE_SIZE         4                                           /**< Size of timer operation queues. */
@@ -86,7 +86,7 @@ uint32_t baudrate_select = 1200;
 #define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin03  
 #define LED_POWER  				      20
 //#define DATA_PERIODIC         300
-uint32_t data_periodic = 				1024; //256; //16;  //180;    //60;
+uint32_t data_periodic = 				60; //1024; //256; //16;  //180;    //60;
 static uint32_t timer_counter = 0;
 static uint8_t data_array[32];  // flash load packet
 static uint8_t data_5888[32];  //adv broadcast packet
@@ -261,10 +261,8 @@ static void weakup_meantimeout_handler(void * p_context)
 		sd_ble_gap_adv_stop();
 		company_id = 0x5888;
 	  adv_interval = 1600;
-	  advertising_init();
-	  advertising_start(adv_interval , 10);
-//	  APP_ERROR_CHECK(err_code);
-//		adv_sleep_secs = 1800; //10;
+//	  advertising_init();
+//	  advertising_start(adv_interval , 10);
 }
 
 /**@brief       Function for the Application's S110 SoftDevice event handler.
@@ -287,20 +285,13 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 												APP_ERROR_CHECK(err_code);
 												pstorage_load(data_array+4, &flash_handle, DATA_LOG_LEN, 0);
 												*(uint16_t *)(data_array+18) = (uint16_t)(pstorage_block_id - pstorage_next_adv);
-//												advertising_init();
-//											  if (!(pstorage_next_adv < pstorage_block_id)) {
-//															err_code = sd_ble_gap_adv_stop();
-//															app_timer_stop(weakup_meantimer_id);
-//												}
-//												else { 
-															app_timer_stop(weakup_meantimer_id);
-															app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(1100, 0), NULL);
-															if ((adv_interval > 200) && ((pstorage_block_id - pstorage_next_adv) > 16)){
-																		sd_ble_gap_adv_stop();
-																		adv_interval = BLE_GAP_ADV_NONCON_INTERVAL_MIN;   //not less then 160 will cause err_code 007  in BLE_GAP_ADV_TYPE_ADV_SCAN_IND mode.
-																		advertising_start(adv_interval, 100);
-															}
-//												}
+												app_timer_stop(weakup_meantimer_id);
+												app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(3100, APP_TIMER_PRESCALER), NULL);
+												if ((adv_interval > 200) && ((pstorage_block_id - pstorage_next_adv) > 16)){
+															sd_ble_gap_adv_stop();
+															adv_interval = BLE_GAP_ADV_NONCON_INTERVAL_MIN;   //not less then 160 will cause err_code 007  in BLE_GAP_ADV_TYPE_ADV_SCAN_IND mode.
+															advertising_start(adv_interval, 20);
+												}
 									}	else 	{
 											err_code = sd_ble_gap_adv_stop();
 											app_timer_stop(weakup_meantimer_id);
@@ -370,7 +361,7 @@ static void weakup_timeout_handler(void * p_context)
 		timer_adv_interval = 0;
 		sd_ble_gap_adv_stop();
 
-//		if (!(timer_counter % data_periodic)) {
+		if (!(timer_counter % 900)) {
 				err_code = pstorage_block_identifier_get(&flash_base_handle,(pstorage_block_id
 							% (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)), &flash_handle);
 				APP_ERROR_CHECK(err_code);
@@ -386,11 +377,20 @@ static void weakup_timeout_handler(void * p_context)
 											((pstorage_next_adv / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)) % PSTORAGE_MAX_APPLICATIONS ))
 													pstorage_next_adv = (pstorage_next_adv / (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN) + 1) * (PSTORAGE_PAGE_SIZE/DATA_LOG_LEN) ;
 						}
-				advertising_init();
-				adv_interval = 1600;
-			  advertising_start(adv_interval, 10);
-//				}
-//		 else if (adv_interval >= 1600) advertising_init();  //updata timercounter
+//				advertising_init();
+//				adv_interval = 1600;
+//			  advertising_start(adv_interval, 10);
+				}
+//		 else {
+    adv_interval = 1600;
+		company_id = 0x5888;
+    advertising_init();  //updata timercounter
+		advertising_start(adv_interval, 20);
+//		 }
+		app_timer_stop(weakup_meantimer_id);
+		err_code = app_timer_start(weakup_meantimer_id,  APP_TIMER_TICKS(500, APP_TIMER_PRESCALER), NULL);
+		APP_ERROR_CHECK(err_code);
+	 
 }
 static void example_cb_handler(pstorage_handle_t  * handle,
 															 uint8_t              op_code,
@@ -458,10 +458,10 @@ int main(void)
 //		timer_counter = -1;
     err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(data_periodic*1000, APP_TIMER_PRESCALER), NULL);
     APP_ERROR_CHECK(err_code);
-    err_code = ble_radio_notification_init(NRF_APP_PRIORITY_LOW,
-                                           NRF_RADIO_NOTIFICATION_DISTANCE_1740US,
-                                           ble_on_radio_active_evt);
-    APP_ERROR_CHECK(err_code);
+		err_code = ble_radio_notification_init(NRF_APP_PRIORITY_LOW,
+																					 NRF_RADIO_NOTIFICATION_DISTANCE_1740US,
+																					 ble_on_radio_active_evt);
+		APP_ERROR_CHECK(err_code);
 		timer_counter = 0 - data_periodic;
 		weakup_timeout_handler(NULL);
     for (;;)
