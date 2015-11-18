@@ -40,7 +40,7 @@ static __INLINE uint32_t pstorage_flash_page_end()
 
 #define PSTORAGE_FLASH_PAGE_END     pstorage_flash_page_end()
 
-#define PSTORAGE_MAX_APPLICATIONS   148                                                         /**< Maximum number of applications that can be registered with the module, configurable based on system requirements. */
+#define PSTORAGE_MAX_APPLICATIONS   10                                                         /**< 140 ; 148 Maximum number of applications that can be registered with the module, configurable based on system requirements. */
 #define PSTORAGE_MIN_BLOCK_SIZE     0x0010                                                      /**< Minimum size of block that can be registered with the module. Should be configured based on system requirements, recommendation is not have this value to be at least size of word. */
 
 #define PSTORAGE_DATA_START_ADDR    ((PSTORAGE_FLASH_PAGE_END - PSTORAGE_MAX_APPLICATIONS - 1) \
@@ -49,8 +49,8 @@ static __INLINE uint32_t pstorage_flash_page_end()
 #define PSTORAGE_SWAP_ADDR          PSTORAGE_DATA_END_ADDR                                      /**< Top-most page is used as swap area for clear and update. */
 
 #define PSTORAGE_MAX_BLOCK_SIZE     PSTORAGE_FLASH_PAGE_SIZE                                    /**< Maximum size of block that can be registered with the module. Should be configured based on system requirements. And should be greater than or equal to the minimum size. */
-#define PSTORAGE_CMD_QUEUE_SIZE     10                                                          /**< Maximum number of flash access commands that can be maintained by the module for all applications. Configurable. */
-
+#define PSTORAGE_CMD_QUEUE_SIZE     100                                                          /**< Maximum number of flash access commands that can be maintained by the module for all applications. Configurable. */
+#define PSTORAGE_BLOCKS_COUNT       (PSTORAGE_MAX_APPLICATIONS*PSTORAGE_PAGE_SIZE/DATA_LOG_LEN)
 
 /** Abstracts persistently memory block identifier. */
 typedef uint32_t pstorage_block_t;

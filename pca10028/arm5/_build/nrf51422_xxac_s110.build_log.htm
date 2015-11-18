@@ -4,6 +4,933 @@
 <h1>µVision Build Log</h1>
 <h2>Project:</h2>
 C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\ble_app_uart_s110_pca10028.uvprojx
-Project File Date:  10/17/2015
+Project File Date:  11/16/2015
 
 <h2>Output:</h2>
+Build target 'nrf51822_xxac_s110'
+compiling main.c...
+..\..\main.c(108): warning:  #47-D: incompatible redefinition of macro "BLE_GAP_ADV_INTERVAL_MAX" (declared at line 225 of "C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_SoftDevice_S110\8.0.0\headers\ble_gap.h")
+  #define BLE_GAP_ADV_INTERVAL_MAX 0x2000                               
+..\..\main.c(384): warning:  #177-D: variable "err_code" was declared but never referenced
+                uint16_t err_code;
+..\..\main.c(512): warning:  #223-D: function "ble_radio_notification_init" declared implicitly
+                err_code = ble_radio_notification_init(NRF_APP_PRIORITY_LOW,
+..\..\main.c(92): warning:  #177-D: variable "data_5888" was declared but never referenced
+  static uint8_t data_5888[32];  //adv broadcast packet
+..\..\main.c: 4 warnings, 0 errors
+linking...
+.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_error.o ignored.
+.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_gpiote.o ignored.
+.\_build\nrf51422_xxac_s110.axf: Warning: L6304W: Duplicate input file .\_build\app_timer.o ignored.
+Program Size: Code=13072 RO-data=288 RW-data=176 ZI-data=5064  
+Finished: 0 information, 3 warning and 0 error messages.
+FromELF: creating hex file...
+".\_build\nrf51422_xxac_s110.axf" - 0 Error(s), 7 Warning(s).
+
+<h2>Software Packages used:</h2>
+
+Package Vendor: ARM
+                http://www.keil.com/pack/ARM.CMSIS.3.20.4.pack
+                ARM::CMSIS:CORE:3.20.0
+                Cortex Microcontroller Software Interface Standard (CMSIS) CORE, DSP, RTOS, Driver
+   * Component: CORE Version: 3.20.0
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_BLE/NordicSemiconductor.nRF_BLE.2.0.0.pack
+                NordicSemiconductor::nRF_BLE:BLE_Modules:ble_common:2.0.0
+                Bluetooth Low Energy (Bluetooth Smart) services and software modules for Nordic Semiconductor nRF family.
+   * Component: ble_common Version: 2.0.0
+   * Component: ble_service_common Version: 2.0.0
+   * Component: ble_nus Version: 2.0.0
+   * Component: ble_conn_params Version: 2.0.0
+   * Component: ble_advdata Version: 2.0.0
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_DeviceFamilyPack/NordicSemiconductor.nRF_DeviceFamilyPack.7.2.1.pack
+                NordicSemiconductor::Device:Startup:7.2.1
+                Nordic Semiconductor nRF ARM devices Device Family Pack.
+   * Component: Startup Version: 7.2.1
+   * Component: ble_radio_notification Version: 2.0.0
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_Drivers/NordicSemiconductor.nRF_Drivers.2.0.0.pack
+                NordicSemiconductor::nRF_Drivers:nrf_delay:2.0.0
+                Drivers for Nordic Semiconductor nRF family.
+   * Component: nrf_delay Version: 2.0.0
+   * Component: nrf_gpio Version: 2.0.0
+   * Component: nrf_error Variant: default Version: 2.0.0
+   * Component: nrf_soc Variant: default Version: 2.0.0
+   * Component: pstorage Variant: default Version: 2.0.0
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_Libraries/NordicSemiconductor.nRF_Libraries.2.0.0.pack
+                NordicSemiconductor::nRF_Libraries:app_gpiote:default:2.0.0
+                Software modules for Nordic Semiconductor nRF family.
+   * Component: app_gpiote Variant: default Version: 2.0.0
+   * Component: app_error Version: 2.0.0
+   * Component: nrf_assert Version: 2.0.0
+   * Component: app_timer Variant: default Version: 2.0.0
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_SoftDevice_Common/NordicSemiconductor.nRF_SoftDevice_Common.1.1.2.pack
+                NordicSemiconductor::nRF_SoftDevice:Internal:sd_common:default:1.1.2
+                Common components for Nordic Semiconductor nRF family SoftDevices.
+   * Component: sd_common Variant: default Version: 1.1.2
+   * Component: softdevice_present Version: 1.1.2
+
+Package Vendor: NordicSemiconductor
+                http://developer.nordicsemi.com/nRF51_SDK/pieces/nRF_SoftDevice_S110/NordicSemiconductor.nRF_SoftDevice_S110.8.0.0.pack
+                NordicSemiconductor::nRF_SoftDevice:s110_hex:8.0.0
+                Components for Bluetooth Low Energy (Bluetooth Smart) S110 SoftDevice for Nordic Semiconductor nRF family.
+   * Component: s110_hex Version: 8.0.0
+   * Component: softdevice_hex Variant: S110 Version: 1.1.2
+   * Component: s110 Variant: default Version: 8.0.0
+   * Component: app_util Variant: default Version: 2.0.0
+
+<h2>Collection of Component include folders:</h2>
+  C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE
+  C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE\nRF_BLE\nRF51822_xxAA
+  C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE\nRF_Drivers\nRF51822_xxAA
+  C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\RTE\nRF_Libraries\nRF51822_xxAA
+  C:\Keil_v5\ARM\PACK\ARM\CMSIS\3.20.4\CMSIS\Include
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_BLE\2.0.0\ble_radio_notification
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_BLE\2.0.0\ble_services\ble_nus
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_BLE\2.0.0\common
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_DeviceFamilyPack\7.2.1\Device\Include
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Drivers\2.0.0\hal
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Drivers\2.0.0\pstorage
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\gpiote
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\timer
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_Libraries\2.0.0\util
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_SoftDevice_Common\1.1.2\softdevice_handler
+  C:\Keil_v5\ARM\PACK\NordicSemiconductor\nRF_SoftDevice_S110\8.0.0\headers
+
+<h2>Collection of Component Files used:</h2>
+
+   * Component: ARM::CMSIS:CORE:3.20.0
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_common:2.0.0
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_service_common:2.0.0
+      Source file:   common\ble_srv_common.c
+      Include file:  common\ble_srv_common.h
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Services:ble_nus:2.0.0
+      Include file:  ble_services\ble_nus\ble_nus.h
+      Source file:   ble_services\ble_nus\ble_nus.c
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_conn_params:2.0.0
+      Include file:  common\ble_conn_params.h
+      Source file:   common\ble_conn_params.c
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_advdata:2.0.0
+      Include file:  common\ble_advdata.h
+      Source file:   common\ble_advdata.c
+
+   * Component: NordicSemiconductor::Device:Startup:7.2.1
+      Source file:   Device\Source\arm\arm_startup_nrf51.s
+      Source file:   Device\Source\system_nrf51.c
+      Include file:  Device\Include\system_nrf51.h
+
+   * Component: NordicSemiconductor::nRF_BLE:BLE_Modules:ble_radio_notification:2.0.0
+      Include file:  ble_radio_notification\ble_radio_notification.h
+      Source file:   ble_radio_notification\ble_radio_notification.c
+
+   * Component: NordicSemiconductor::nRF_Drivers:nrf_delay:2.0.0
+      Source file:   hal\nrf_delay.c
+      Include file:  hal\nrf_delay.h
+
+   * Component: NordicSemiconductor::nRF_Drivers:nrf_gpio:2.0.0
+      Include file:  hal\nrf_gpio.h
+
+   * Component: NordicSemiconductor::nRF_Drivers:nrf_error:default:2.0.0
+
+   * Component: NordicSemiconductor::nRF_Drivers:nrf_soc:default:2.0.0
+
+   * Component: NordicSemiconductor::nRF_Drivers:pstorage:default:2.0.0
+      Include file:  pstorage\pstorage.h
+      Source file:   pstorage\pstorage.c
+      Include file:  pstorage\config\pstorage_platform.h
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_gpiote:default:2.0.0
+      Source file:   gpiote\app_gpiote.c
+      Include file:  gpiote\app_gpiote.h
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_error:2.0.0
+      Source file:   util\app_error.c
+      Include file:  util\app_error.h
+
+   * Component: NordicSemiconductor::nRF_Libraries:nrf_assert:2.0.0
+      Include file:  util\nrf_assert.h
+      Source file:   util\nrf_assert.c
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_timer:default:2.0.0
+      Source file:   timer\app_timer.c
+      Include file:  timer\app_timer.h
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:sd_common:default:1.1.2
+      Source file:   softdevice_handler\softdevice_handler.c
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:Internal:softdevice_present:1.1.2
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:s110_hex:8.0.0
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:softdevice_hex:S110:1.1.2
+
+   * Component: NordicSemiconductor::nRF_SoftDevice:s110:default:8.0.0
+      Include file:  headers\ble_gap.h
+      Include file:  headers\nrf_mbr.h
+      Include file:  headers\ble_ranges.h
+      Include file:  headers\nrf_error_soc.h
+      Include file:  headers\ble_gatt.h
+      Include file:  headers\ble_l2cap.h
+      Include file:  headers\nrf_sdm.h
+      Include file:  headers\softdevice_assert.h
+      Include file:  headers\nrf_error_sdm.h
+      Include file:  headers\nrf_soc.h
+      Include file:  headers\nrf_error.h
+      Include file:  headers\ble_types.h
+      Include file:  headers\ble_gattc.h
+      Include file:  headers\ble_hci.h
+      Include file:  headers\nrf_sd_def.h
+      Include file:  headers\ble_err.h
+      Include file:  headers\nrf_svc.h
+      Include file:  headers\ble.h
+      Include file:  headers\ble_gatts.h
+
+   * Component: NordicSemiconductor::nRF_Libraries:app_util:default:2.0.0
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+Error: Flash Download failed  -  Target DLL has been cancelled
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+e.
+Programming Done.
+Verify OK.
+Application running ...
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Done.
+Programming Done.
+Verify OK.
+Application running ...
+.
+Application running ...
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Failed!
+Error: Flash Download failed  -  "Cortex-M0"
+s\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Failed!
+Error: Flash Download failed  -  "Cortex-M0"
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+Error: Flash Download failed  -  Target DLL has been cancelled
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+* JLink Info: Found SWD-DP with ID 0x0BB11477
+* JLink Info: Found Cortex-M0 r0p0, Little endian.
+* JLink Info: FPUnit: 4 code (BP) slots and 0 literal slots
+* JLink Info: CoreSight components:
+* JLink Info: ROMTbl 0 @ F0000000
+* JLink Info: ROMTbl 0 [0]: F00FF000, CID: B105100D, PID: 000BB471 ROM Table
+* JLink Info: ROMTbl 1 @ E00FF000
+* JLink Info: ROMTbl 1 [0]: FFF0F000, CID: B105E00D, PID: 000BB008 SCS
+* JLink Info: ROMTbl 1 [1]: FFF02000, CID: B105E00D, PID: 000BB00A DWT
+* JLink Info: ROMTbl 1 [2]: FFF03000, CID: B105E00D, PID: 000BB00B FPB
+* JLink Info: ROMTbl 0 [1]: 00002000, CID: B105900D, PID: 000BB9A3 ???
+ROMTableAddr = 0xE00FF003
+ 
+Target info:
+------------
+Device: nRF51822_xxAA
+VTarget = 3.300V
+State of Pins: 
+TCK: 0, TDI: 0, TDO: 1, TMS: 0, TRES: 1, TRST: 1
+Hardware-Breakpoints: 4
+Software-Breakpoints: 8192
+Watchpoints:          2
+JTAG speed: 2000 kHz
+ 
+Erase Failed!
+Error: Flash Download failed  -  "Cortex-M0"
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+Error: Flash Download failed  -  Target DLL has been cancelled
+Load "C:\\Users\\l1117\\Documents\\GitHub\\UARTLOGGER\\pca10028\\arm5\\_build\\nrf51422_xxac_s110.axf" 
+* JLink Info: Device "NRF51822_XXAA" selected.
+Set JLink Project File to "C:\Users\l1117\Documents\GitHub\UARTLOGGER\pca10028\arm5\JLinkSettings.ini"
+* JLink Info: Device "NRF51822_XXAA" selected.
+ 
+JLink info:
+------------
+DLL: V4.98c, compiled Apr 23 2015 20:21:50
+Firmware: J-Link ARM-OB STM32 compiled Aug 22 2012 19:52:04
+Hardware: V7.00
+S/N : 20090928 
+Feature(s) : RDI,FlashDL,FlashBP,JFlash,GDBFull 
+ 
+Error: Flash Download failed  -  Target DLL has been cancelled
