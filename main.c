@@ -83,10 +83,10 @@ static uint32_t timer_adv_interval = 0;
 //uint8_t device_name[15]  = "5T:" ;
 uint32_t baudrate_select = 1200;
 //#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput5  //pin04   BEACON
-#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput4  //pin02  
+#define ADC_AIN						  ADC_CONFIG_PSEL_AnalogInput3  //pin02  
 #define LED_POWER  				      20
 //#define DATA_PERIODIC         300
-uint32_t data_periodic = 				60*5; //1024; //256; //16;  //180;    //60;
+uint32_t data_periodic = 				60*15; //1024; //256; //16;  //180;    //60;
 static uint32_t timer_counter = 0;
 static uint8_t data_array[32];  // flash load packet
 static uint8_t data_5888[32];  //adv broadcast packet
@@ -170,8 +170,8 @@ static void advertising_init(void)
 //    ble_uuid_t adv_uuids[] = {{BLE_UUID_NUS_SERVICE, m_nus.uuid_type}};
 
     memset(&advdata, 0, sizeof(advdata));
-    advdata.name_type               = BLE_ADVDATA_NO_NAME;
-//		advdata.short_name_len          = 16;
+    advdata.name_type               = BLE_ADVDATA_SHORT_NAME;		//BLE_ADVDATA_NO_NAME;
+		advdata.short_name_len          = 16;
 //    advdata.include_appearance      = false;
     advdata.flags                   = flags;
 //    advdata.uuids_complete.uuid_cnt = sizeof(adv_uuids) / sizeof(adv_uuids[0]);
@@ -188,11 +188,14 @@ static void advertising_init(void)
 			*(uint32_t *)(data_array) = timer_counter + timer_adv_interval /1600;      
 //		}
 			scanrsp.p_manuf_specific_data		= &manuf_data;
-//		advdata.p_manuf_specific_data		= &manuf_data;
     data_array[20] = '5';
     data_array[21] = 'T';
     data_array[22] = 'M';
-    data_array[23] = '-';
+    data_array[23] = ':';
+//    data_array[20] = 'T';
+//    data_array[21] = 'E';
+//    data_array[22] = 'S';
+//    data_array[23] = 'T';
 		*(uint16_t *)(data_array +10) = adv_count;
     err_code = ble_advdata_set(&advdata, &scanrsp);
     APP_ERROR_CHECK(err_code);
@@ -268,9 +271,8 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 //													err_code = pstorage_store(&flash_handle, data_array+4, DATA_LOG_LEN, 0 );
 //													APP_ERROR_CHECK(err_code);
 													company_id= 0x5881;
-//													pstorage_next_adv = timer_counter;   
-													pstorage_next_adv = timer_counter - (PSTORAGE_BLOCKS_COUNT - 64) * data_periodic;
-//													pstorage_next_adv = (((timer_counter - data_periodic * PSTORAGE_BLOCKS_COUNT)/64 + 1)*64);													//for test adv_broadcast.
+													pstorage_next_adv = timer_counter;   
+//													pstorage_next_adv = timer_counter - (PSTORAGE_BLOCKS_COUNT - 64) * data_periodic;
 											    err_code = app_timer_start(weakup_id,  APP_TIMER_TICKS(data_periodic*1000, APP_TIMER_PRESCALER), NULL);
 													APP_ERROR_CHECK(err_code);
 													adv_interval = BLE_GAP_ADV_INTERVAL_MAX;  //0x4000 10.24s //1600;
@@ -279,7 +281,7 @@ static void on_ble_evt(ble_evt_t * p_ble_evt)
 									}
 										else last_dtu_time = time_counter_5881;
 								}
-							else if ((company_id == 0x5881) )  {
+							else if (company_id == 0x5881)  {
 								 if ((timer_counter - pstorage_next_adv)>= data_periodic){
 												pstorage_next_adv+= data_periodic;
 												err_code = pstorage_block_identifier_get(&flash_base_handle,((pstorage_next_adv/data_periodic)
@@ -515,6 +517,19 @@ int main(void)
 		APP_ERROR_CHECK(err_code);
 //		timer_counter = 0 - data_periodic;
 //		weakup_timeout_handler(NULL);
+		ble_gap_addr_t	p_addr;
+		uint8_t adv_name[16]="5TM:";
+		sd_ble_gap_address_get(&p_addr);
+		uint8_t i = 4;
+		adv_name[i++] = char_hex(p_addr.addr[5]>>4);		adv_name[i++] = char_hex(p_addr.addr[5]);
+		adv_name[i++] = char_hex(p_addr.addr[4]>>4);		adv_name[i++] = char_hex(p_addr.addr[4]);
+		adv_name[i++] = char_hex(p_addr.addr[3]>>4);		adv_name[i++] = char_hex(p_addr.addr[3]);
+		adv_name[i++] = char_hex(p_addr.addr[2]>>4);		adv_name[i++] = char_hex(p_addr.addr[2]);
+		adv_name[i++] = char_hex(p_addr.addr[1]>>4);		adv_name[i++] = char_hex(p_addr.addr[1]);
+		adv_name[i++] = char_hex(p_addr.addr[0]>>4);		adv_name[i++] = char_hex(p_addr.addr[0]);
+		ble_gap_conn_sec_mode_t sec_mode;
+		BLE_GAP_CONN_SEC_MODE_SET_OPEN(&sec_mode);
+		err_code = sd_ble_gap_device_name_set(&sec_mode,adv_name,16);
 		adv_interval = 1600;    //1sec
 		company_id = 0x588F;
 		advertising_init();  //updata timercounter
